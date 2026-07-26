@@ -1,0 +1,266 @@
+aid: itu
+name: ITU
+review:
+  question: >-
+    Does the ITU operate a public, first-party developer surface, and what is its CAMARA /
+    Open Gateway posture?
+  answer: partial
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: Global
+  tier: regulator
+findings:
+  summary: |
+    ITU is the United Nations specialized agency for ICT — the treaty body that allocates global
+    spectrum (ITU-R), publishes the Recommendations that define interoperable telecom networks
+    (ITU-T), and produces the world's reference ICT statistics (ITU-D). It sits above the telecom
+    value chain, not inside it.
+
+    ITU has NO developer portal. developer.itu.int, developers.itu.int, docs.itu.int and api.itu.int
+    do not resolve at all (curl exit 000, no DNS). itu.int/developer, /developers and /api all
+    return HTTP 404. The official ITU GitHub organization (github.com/ITUINT, verified via the
+    GitHub API: "International Telecommunication Union", itumail@itu.int, Switzerland) has ZERO
+    public repositories. No Postman workspace, no npm/PyPI/Maven/NuGet SDK, no CLI, no webhooks, no
+    AsyncAPI, no GraphQL and no gRPC surface were found.
+
+    And yet ITU operates two REAL, publicly callable HTTP APIs, both confirmed live on 2026-07-25:
+
+    1. The ITU DataHub API at https://api.datahub.itu.int/v2 — an AWS API Gateway + CloudFront
+       backend serving datahub.itu.int, ITU's official ICT statistics portal. It is completely
+       undocumented; the endpoint list was recovered from the DataHub Next.js client bundle
+       (datahub.itu.int/_next/static/chunks/*.js), which hardcodes the base URL
+       "https://api.datahub.itu.int/v2" and templates such as ${_}/country/all, ${_}/region/all,
+       ${_}/dashboard/all, ${_}/dictionaries/getcategories, ${_}/dictionaries/getbyid/{codeID},
+       ${_}/data/bycode/{codeID}, ${_}/data/bycode/{codeID}/byiso/{iso}, ${_}/data/download,
+       ${_}/aggregation/bycodeid/{code}/byregionid/{region}, ${_}/idi/dashboard/all,
+       ${_}/idi/dashboard/version, ${_}/idi/data/bycountryid/{id}, ${_}/idi/region/byregionid/{id},
+       ${_}/umc/dashboard/all, ${_}/umc/topic/all, ${_}/umc/macro/all, ${_}/umc/target/all,
+       ${_}/umc/byid/{id}, ${_}/umc/bycountryid/{id} and ${_}/methodology/dataset. Verified 200 with
+       real payloads and NO credentials, NO API key, and NO Referer/Origin header required.
+
+    2. The ITU Proximity to Fibre Node API at https://bbmaps.itu.int/functionproximity — an ITU-D
+       Technology and Network Development demonstration over the ITU Interactive Transmission Map
+       (Broadband Maps) data, lightly described on a single ITU-D page. Two routes,
+       route-calcdistancetonode and route-calc10kmintersection, accept a POSTed text/csv body with
+       X and Y columns and return a URL to a generated ZIP under bbmaps.itu.int/api/output/. Both
+       confirmed HTTP 200 with real generated output.
+
+    The honest finding is an inversion of the usual regulator pattern: the data is genuinely open
+    and ungated, but the API programme does not exist as a declared product. There is no portal, no
+    specification, no versioning policy, no rate limits, no terms of programmatic use, and no
+    support channel. A developer can call ITU today only by reverse-engineering ITU's own web
+    client.
+  developerPortal:
+    url: ''
+    confirmed: false
+    verdict: >-
+      No developer portal of any kind. The closest artefact is a single ITU-D page titled
+      "API - Proximity to Fibre Node" (HTTP 200) which explains what an API is in one paragraph and
+      offers a sample CSV — a demonstration/marketing page, not a portal.
+    probes:
+    - url: https://developer.itu.int
+      status: '000'
+      note: does not resolve
+    - url: https://developers.itu.int
+      status: '000'
+      note: does not resolve
+    - url: https://docs.itu.int
+      status: '000'
+      note: does not resolve
+    - url: https://api.itu.int
+      status: '000'
+      note: does not resolve
+    - url: https://www.itu.int/developer
+      status: '404'
+    - url: https://www.itu.int/developers
+      status: '404'
+    - url: https://www.itu.int/api
+      status: '404'
+    - url: https://www.itu.int/opendata
+      status: '404'
+    - url: https://www.itu.int/en/opendata
+      status: '404'
+    - url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+      status: '200'
+      note: >-
+        "API - Proximity to Fibre Node" — a demonstration page, not documentation. No base URL,
+        no auth section, no endpoint reference, no OpenAPI link. Links a sample_api.csv.
+    - url: https://datahub.itu.int
+      status: '200'
+      note: ITU DataHub statistics portal (Next.js SPA). No API tab, no developer section.
+    - url: https://api.datahub.itu.int/v2
+      status: '403'
+      note: >-
+        AWS API Gateway MissingAuthenticationTokenException on the unrouted base path — the host is
+        real; child routes return 200 anonymously.
+    - url: https://www.itu.int/net4/ITU-D/icteye/
+      status: '200'
+      note: ICT Eye — serves the identical Next.js bundle as DataHub.
+    - url: https://bbmaps.itu.int
+      status: '200'
+      note: ITU Broadband Maps / Interactive Transmission Map.
+  gated: false
+  gatedNote: >-
+    Nothing is gated in practice — no registration, no login wall, no partner agreement, no sales
+    contact. Both confirmed APIs answer anonymously. The barrier at ITU is not a gate, it is the
+    complete absence of a published developer surface.
+  openapi:
+    harvested: false
+    specsCount: 0
+    note: >-
+      No OpenAPI or Swagger document exists anywhere on ITU infrastructure. Probed and all negative:
+      https://www.itu.int/openapi.json (404); https://api.datahub.itu.int/v2/openapi.json,
+      /v2/swagger.json, /v2/docs, /v2/api-docs, /v2/spec, /v2/redoc (all 403 API Gateway
+      MissingAuthenticationToken, i.e. no such route); https://bbmaps.itu.int/functionproximity/
+      swagger.json and /openapi.json (404); https://bbmaps.itu.int/openapi.json and /docs (200 but
+      text/html SPA shell, not a spec). The openapi/ directory is therefore omitted from this repo.
+  camara:
+    posture: >-
+      No CAMARA implementation and no CAMARA reference found on ITU infrastructure. ITU is a UN
+      treaty body that sits outside the CAMARA/GSMA Open Gateway programme entirely — CAMARA is
+      hosted by the Linux Foundation in collaboration with the GSMA Operator Platform Group, and ITU
+      is not named among its members or participating organizations. Not even a press release.
+    apisFound: []
+    openGatewayMember: false
+    openGatewayNote: >-
+      GSMA Open Gateway is an operator commitment programme; ITU is not a mobile network operator and
+      is not on the operator list. ITU reaches the CAMARA layer, if at all, only through its
+      standards role.
+    adunaChannel: false
+    cibaPresent: false
+    cibaNote: >-
+      CAMARA specifies OIDC and CIBA (Client-Initiated Backchannel Authentication) for network-based
+      authorization. Neither appears anywhere in ITU's surface — no /.well-known/openid-configuration
+      is served on www.itu.int (404) or datahub.itu.int (403), and neither confirmed API uses OAuth.
+  tmforum:
+    conformance: none-found
+    note: >-
+      No TM Forum Open API conformance certification found for ITU, and none would be expected — ITU
+      is itself a standards body, and its telecom standards track is the ITU-T Recommendation series
+      (published at https://www.itu.int/en/ITU-T/publications/Pages/recs.aspx, HTTP 200) rather than
+      TM Forum's TMF620/622/641 BSS/OSS Open APIs. ITU-T Recommendations are published as PDF
+      documents; ITU does not publish them as OpenAPI, JSON Schema, or any machine-readable artifact.
+  threeGPP:
+    nefScefSurface: false
+    note: >-
+      ITU-R defines the IMT requirements framework that 3GPP submits candidate radio interface
+      technologies against, which is why ITU is the formal home of the "IMT-2020"/"IMT-2030" labels
+      behind 5G and 6G. That is a specification and evaluation role only. ITU operates no Network
+      Exposure Function (NEF), no SCEF, no network-slicing API, and no edge/MEC API of its own.
+  auth:
+    model: none
+    detail: >-
+      ITU DataHub API: no authentication whatsoever. Confirmed 200 on /v2/country/all and
+      /v2/dashboard/all with no User-Agent, no Referer, no Origin and no key. No OAuth2, no API key,
+      no mTLS, no CIBA. Proximity to Fibre Node API: an Azure Functions function key passed as a
+      ?code= query parameter, hardcoded in the public ITU web client — a shared secret that is not
+      secret, functionally equivalent to open access. No signup path exists to obtain a key of one's
+      own.
+    rateLimits: none published
+  webhooks:
+    present: false
+    note: No webhooks, no event catalog, no AsyncAPI. ITU publishes RSS and email alerts only.
+  sdks:
+    present: false
+    note: >-
+      No first-party SDK on npm, PyPI, Maven or NuGet. github.com/ITUINT is the verified official ITU
+      organization and has 0 public repositories.
+  incidentalSurfaces:
+  - url: https://www.itu.int/search/wp-json/
+    status: '200'
+    note: >-
+      The ITU Search subsite leaves the standard WordPress REST API open, returning a full
+      discovery document with wp/v2 namespaces. This is CMS plumbing, not an ITU data product, and
+      is not listed in apis.yml.
+  - url: https://www.itu.int/hub/wp-json/
+    status: '401'
+    note: >-
+      The main ITU news hub's WordPress REST API is locked: {"code":"rest_cannot_access","message":
+      "DRA: Only authenticated users can access the REST API."}
+  - url: https://www.itu.int/search?q=
+    status: '200'
+    note: ITU site search is a Google Custom Search Engine (cse.google.com, cx=603416e14d8fe4ef6) — no ITU search API.
+  transports:
+  - protocol: REST
+    scheme: https
+    baseURL: https://api.datahub.itu.int/v2
+    documented: false
+    confirmed: true
+    note: JSON over HTTPS, AWS API Gateway behind CloudFront. Anonymous. Undocumented.
+  - protocol: REST
+    scheme: https
+    baseURL: https://bbmaps.itu.int/functionproximity
+    documented: true
+    confirmed: true
+    note: >-
+      Azure Functions. POST text/csv in, plain-text ZIP URL out. Documented only as a demonstration
+      on one ITU-D page.
+  - protocol: GraphQL
+    documented: false
+    confirmed: false
+    note: No /graphql surface found on itu.int, datahub.itu.int or bbmaps.itu.int.
+  - protocol: gRPC
+    documented: false
+    confirmed: false
+    note: No published .proto files.
+  - protocol: WebSocket
+    documented: false
+    confirmed: false
+  endpointsConfirmed:
+  - GET  https://api.datahub.itu.int/v2/country/all
+  - GET  https://api.datahub.itu.int/v2/region/all
+  - GET  https://api.datahub.itu.int/v2/dashboard/all
+  - GET  https://api.datahub.itu.int/v2/dictionaries/getcategories
+  - GET  https://api.datahub.itu.int/v2/data/bycode/{codeID}
+  - GET  https://api.datahub.itu.int/v2/umc/topic/all
+  - GET  https://api.datahub.itu.int/v2/idi/dashboard/version
+  - GET  https://api.datahub.itu.int/v2/methodology/dataset
+  - POST https://bbmaps.itu.int/functionproximity/route-calcdistancetonode
+  - POST https://bbmaps.itu.int/functionproximity/route-calc10kmintersection
+sources:
+- url: https://www.itu.int/
+  type: Website
+  status: '200'
+  note: ITU homepage. No developer or API navigation.
+- url: https://datahub.itu.int/
+  type: Documentation
+  status: '200'
+  note: >-
+    ITU DataHub. Its HTML head carries <link rel="preconnect" href="https://api.datahub.itu.int/v2"/>,
+    which is how the API host was located.
+- url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  type: Documentation
+  status: '200'
+  note: The only ITU page that presents an API to the public. A demonstration, not a reference.
+- url: https://www.itu.int/en/ITU-D/Technology/Documents/sample_api.csv
+  type: Example
+  status: '200'
+  note: Sample input for the Proximity API — confirmed the required X,Y column contract.
+- url: https://bbmaps.itu.int/web10km/
+  type: Application
+  status: '200'
+  note: >-
+    The client app whose bundle declares both proximity routes and their embedded Azure Functions
+    keys.
+- url: https://github.com/ITUINT
+  type: GitHubOrganization
+  status: '200'
+  note: >-
+    Verified official ITU organization via the GitHub API (name "International Telecommunication
+    Union", email itumail@itu.int). public_repos = 0.
+- url: https://camaraproject.org/
+  type: Reference
+  status: '200'
+  note: >-
+    CAMARA participant listing checked for ITU. ITU is not named. CAMARA is a Linux Foundation
+    project collaborating with the GSMA Operator Platform Group.
+- url: https://www.itu.int/en/ITU-T/publications/Pages/recs.aspx
+  type: Documentation
+  status: '200'
+  note: ITU-T Recommendations — PDF documents, no machine-readable API artifacts.
+actions:
+  apisListed: 2
+  openapiDirectoryCreated: false
+  reason: >-
+    Two real, live-confirmed APIs are listed. No OpenAPI exists to harvest, so the openapi/
+    directory is intentionally omitted rather than populated with anything derived or invented.

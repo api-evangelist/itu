@@ -1,0 +1,102 @@
+aid: itu
+url: https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/apis.yml
+name: ITU
+kind: company
+description: >-
+  The International Telecommunication Union (ITU) is the United Nations specialized agency for
+  information and communication technologies, headquartered in Geneva and made up of 194 Member
+  States plus roughly 1,000 sector members. It sits at the top of the global telecom value chain
+  rather than inside it: ITU-R allocates the global radio spectrum and manages the master
+  international frequency register and satellite filings, ITU-T publishes the Recommendations that
+  define interoperable telecom networks, and ITU-D collects and publishes the world's reference ICT
+  statistics. Its market is Global by treaty. Its API posture is genuinely open but entirely
+  undeclared: ITU operates real, anonymously callable HTTP APIs behind the DataHub statistics portal
+  and behind an ITU-D "Proximity to Fibre Node" demonstration built on the ITU Broadband Maps, and
+  neither requires a key, a login, or a partner agreement — but there is no developer portal, no
+  api.itu.int, no published OpenAPI, no SDK, no terms of programmatic use, and the official ITU
+  GitHub organization has zero public repositories. ITU is not a CAMARA participant and not a GSMA
+  Open Gateway operator; network APIs are being standardised outside the UN system, and ITU's role
+  in that layer is limited to the IMT requirements framework rather than any callable interface.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Telecommunications
+- Global
+- Regulator
+- Standards
+- Spectrum
+- Satellite
+- Broadband
+- ICT Statistics
+- Open Data
+- United Nations
+created: '2026-07-25'
+modified: '2026-07-25'
+specificationVersion: '0.19'
+apis:
+- aid: itu:itu-datahub-api
+  name: ITU DataHub API
+  description: >-
+    The undocumented JSON API that serves the ITU DataHub (datahub.itu.int), ITU's official ICT
+    statistics portal and the successor to ICT Eye. Confirmed anonymously callable on 2026-07-25 with
+    no key, header, or referer required — /v2/country/all returns the full country reference list,
+    /v2/region/all the ITU/BDT and UN M49 groupings, /v2/dictionaries/getcategories the full indicator
+    dictionary, /v2/data/bycode/{codeID} the time series for an indicator, and /v2/idi/* and /v2/umc/*
+    the ICT Development Index and Universal Meaningful Connectivity dashboards. ITU publishes no
+    documentation, no OpenAPI, and no terms of programmatic use for this surface; the endpoint list
+    was recovered from the DataHub client bundle, so it should be treated as an internal backend that
+    happens to be public rather than as a supported product API.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - ICT Statistics
+  - Open Data
+  - Indicators
+  - Connectivity
+  - Regulator
+  properties:
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+- aid: itu:itu-proximity-to-fibre-node-api
+  name: ITU Proximity to Fibre Node API
+  description: >-
+    An ITU-D Technology and Network Development API that scores a batch of coordinates against the ITU
+    Interactive Transmission Map (Broadband Maps) fibre network data. Two routes are published on the
+    ITU-D demonstration page — route-calcdistancetonode returns the proximity band to the nearest
+    fibre node, and route-calc10kmintersection returns a within-10km flag. Both accept a POSTed
+    text/csv body with X and Y columns and return a URL to a generated ZIP of results; both were
+    confirmed returning HTTP 200 with real output on 2026-07-25. Access is by an Azure Functions
+    function key passed as a ?code= query parameter that ITU embeds in the public web client, so it is
+    effectively open; there is no signup, no OpenAPI, and no rate limit published.
+  humanURL: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  baseURL: https://bbmaps.itu.int/functionproximity
+  tags:
+  - Broadband
+  - Fibre
+  - Geospatial
+  - Connectivity
+  - Open Data
+  properties:
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+common:
+- type: Website
+  url: https://www.itu.int/
+- type: Documentation
+  url: https://www.itu.int/en/ITU-T/publications/Pages/recs.aspx
+- type: GitHubOrganization
+  url: https://github.com/ITUINT
+- type: LinkedIn
+  url: https://www.linkedin.com/company/itu
+- type: Blog
+  url: https://www.itu.int/hub/
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
