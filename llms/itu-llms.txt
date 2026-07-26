@@ -1,0 +1,69 @@
+# ITU — International Telecommunication Union
+
+> The United Nations specialized agency for information and communication technologies. ITU-R
+> allocates the global radio spectrum and manages the master international frequency register,
+> ITU-T publishes the Recommendations that define interoperable telecom networks, and ITU-D
+> collects and publishes the world's reference ICT statistics. ITU operates two real, publicly
+> callable HTTP APIs — the DataHub statistics API and the ITU-D Proximity to Fibre Node API — but
+> publishes no developer portal, no OpenAPI, no SDK and no terms of programmatic use for either.
+
+ITU's API posture is an inversion of the usual regulator pattern: the data is genuinely open and
+ungated, but the API programme does not exist as a declared product. Both APIs answer anonymously.
+The descriptions and artifacts linked below were derived by API Evangelist from live probes of
+ITU's own infrastructure; ITU has not published, reviewed or endorsed them.
+
+## APIs
+
+- [ITU DataHub API](https://datahub.itu.int/): The undocumented JSON API behind ITU's official ICT
+  statistics portal. Base URL `https://api.datahub.itu.int/v2`. 18 confirmed anonymous GET
+  operations covering country and region reference data, the full indicator dictionary, indicator
+  time series by country and by regional aggregate, curated dashboards, the ICT Development Index
+  (IDI), and the Universal and Meaningful Connectivity (UMC) targets. No key, no login, no rate
+  limit published.
+- [ITU Proximity to Fibre Node API](https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx):
+  An ITU-D batch geospatial API over the ITU Interactive Transmission Map. Base URL
+  `https://bbmaps.itu.int/functionproximity`. POST a `text/csv` body of `X,Y` coordinates and
+  receive a URL to a generated ZIP of results. Two routes: proximity band to the nearest fibre node,
+  and a within-10km flag.
+
+## Specs
+
+- [ITU DataHub OpenAPI](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/openapi/itu-datahub-openapi.yml): OpenAPI 3.1.0, 18 operations, derived from live observed responses.
+- [ITU Proximity OpenAPI](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/openapi/itu-proximity-openapi.yml): OpenAPI 3.1.0, 2 operations, derived from ITU's demonstration page, its public web client, and confirmed live calls.
+
+## Artifacts
+
+- [Authentication profile](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/authentication/itu-authentication.yml): anonymous on DataHub; an embedded Azure Functions key on Proximity.
+- [API conventions](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/conventions/itu-conventions.yml): pagination, versioning, error envelope, rate-limit signalling — and what is absent.
+- [Error catalog](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/errors/itu-problem-types.yml): the real observed error bodies, none of which are RFC 9457.
+- [Lifecycle](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/lifecycle/itu-lifecycle.yml): versioning posture and the absence of any deprecation policy, SLA or status page.
+- [Conformance](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/conformance/itu-conformance.yml): standards this surface does and does not conform to.
+- [Data model](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/data-model/itu-data-model.yml): the DataHub entity graph — Country, Region, Indicator, DataPoint, IDI, UMC.
+- [MCP server](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/mcp/itu-mcp.yml): a candidate tool surface derived from the OpenAPI. ITU publishes no MCP server.
+- [Agent skills](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/skills/_index.yml): packaged operating instructions for the marquee DataHub and Proximity flows.
+- [Domain security](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/security/itu-domain-security.yml): TLS, HSTS, DNSSEC, CAA, SPF and DMARC probe results for itu.int.
+- [Well-known index](https://raw.githubusercontent.com/api-evangelist/itu/refs/heads/main/well-known/itu-well-known.yml): the full `/.well-known/` probe result — no security.txt, no OIDC discovery, no API catalog.
+
+## Provider-published
+
+- [BBMaps llms.txt](https://bbmaps.itu.int/llms.txt): ITU's own llms.txt for the Broadband Maps
+  platform — the single machine-readable, AI-facing document ITU publishes anywhere. Saved verbatim
+  in this repo at `llms/itu-bbmaps-llms.txt`.
+
+## Docs
+
+- [ITU DataHub](https://datahub.itu.int/): the portal the DataHub API serves. No API tab, no developer section.
+- [ITU-D "API - Proximity to Fibre Node"](https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx): the only ITU page that presents an API to the public.
+- [ITU Interactive Transmission Maps](https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx): the Broadband Maps programme behind the Proximity API.
+- [ITU-T Recommendations](https://www.itu.int/en/ITU-T/publications/Pages/recs.aspx): ITU's telecom standards, published as PDF only — no OpenAPI, no JSON Schema.
+- [ITU-D statistics reports](https://www.itu.int/itu-d/reports/statistics/): the reference publications built on the DataHub data.
+- [ITU Hub](https://www.itu.int/hub/): ITU news and blog.
+
+## Absent
+
+ITU publishes none of the following, verified 2026-07-26: developer portal (developer.itu.int,
+developers.itu.int, docs.itu.int and api.itu.int do not resolve), OpenAPI or Swagger, SDKs on npm /
+PyPI / Maven / NuGet, a CLI, webhooks or AsyncAPI, GraphQL, gRPC, a Postman workspace, a status
+page, a changelog, a deprecation policy, an SLA, published rate limits, a security.txt, a
+vulnerability disclosure programme, a trust center, or any public repository in its official GitHub
+organization (github.com/ITUINT, 0 public repos).

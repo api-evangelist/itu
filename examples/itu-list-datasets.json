@@ -1,0 +1,42 @@
+[
+  {
+    "datasetID": 1,
+    "datasetShortName": "WTI",
+    "datasetType": "Quantitative",
+    "teamShortName": "IDA",
+    "teamName": "ICT DATA & ANALYTICS DIVISION",
+    "email": "indicators@itu.int",
+    "publiclyVisible": true,
+    "hasFrozenPublicData": true
+  },
+  {
+    "datasetID": 2,
+    "datasetShortName": "TREG",
+    "datasetType": "Qualitative",
+    "teamShortName": "RME",
+    "teamName": "REGULATORY & MARKET ENVIRONMENT DIVISION",
+    "email": "treg@itu.int",
+    "publiclyVisible": true,
+    "hasFrozenPublicData": false
+  },
+  {
+    "datasetID": 4,
+    "datasetShortName": "TARIFFPOLICIES",
+    "datasetType": "Qualitative",
+    "teamShortName": "RME",
+    "teamName": "REGULATORY & MARKET ENVIRONMENT DIVISION",
+    "email": "tariff@itu.int",
+    "PubliclyVisible": true,
+    "HasFrozenPublicData": false
+  },
+  {
+    "datasetID": 8,
+    "datasetShortName": "HOUSEHOLDS",
+    "datasetType": "Quantitative",
+    "teamShortName": "IDA",
+    "teamName": "ICT DATA & ANALYTICS DIVISION",
+    "email": "indicators@itu.int",
+    "publiclyVisible": true,
+    "hasFrozenPublicData": true
+  }
+]

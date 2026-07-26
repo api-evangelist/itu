@@ -1,0 +1,32 @@
+[
+  {
+    "targetID": 0,
+    "min": -1,
+    "max": -1,
+    "label": "No data"
+  },
+  {
+    "targetID": 1,
+    "min": 0,
+    "max": 50,
+    "label": "Limited"
+  },
+  {
+    "targetID": 2,
+    "min": 50,
+    "max": 75,
+    "label": "Satisfactory"
+  },
+  {
+    "targetID": 3,
+    "min": 75,
+    "max": 95,
+    "label": "Advanced"
+  },
+  {
+    "targetID": 4,
+    "min": 95,
+    "max": 100,
+    "label": "Target met"
+  }
+]

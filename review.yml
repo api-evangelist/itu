@@ -106,14 +106,24 @@ findings:
     complete absence of a published developer surface.
   openapi:
     harvested: false
-    specsCount: 0
+    derived: true
+    specsCount: 2
+    operationsCount: 20
     note: >-
-      No OpenAPI or Swagger document exists anywhere on ITU infrastructure. Probed and all negative:
-      https://www.itu.int/openapi.json (404); https://api.datahub.itu.int/v2/openapi.json,
-      /v2/swagger.json, /v2/docs, /v2/api-docs, /v2/spec, /v2/redoc (all 403 API Gateway
-      MissingAuthenticationToken, i.e. no such route); https://bbmaps.itu.int/functionproximity/
-      swagger.json and /openapi.json (404); https://bbmaps.itu.int/openapi.json and /docs (200 but
-      text/html SPA shell, not a spec). The openapi/ directory is therefore omitted from this repo.
+      No OpenAPI or Swagger document exists anywhere on ITU infrastructure. Re-probed 2026-07-26 and
+      still all negative: https://www.itu.int/openapi.json (404); https://api.datahub.itu.int
+      /{,v2/}{openapi.json,openapi.yaml,swagger.json,api-docs,docs,redoc} and
+      /swagger/v1/swagger.json (all 403 API Gateway MissingAuthenticationToken, i.e. no such route);
+      https://bbmaps.itu.int/functionproximity/swagger.json and /openapi.json (404);
+      https://bbmaps.itu.int/openapi.json and /docs (200 but text/html SPA shell, not a spec). No
+      GraphQL introspection surface and no MCP server exist either.
+
+      The openapi/ directory in this repo is therefore DERIVED, not harvested: openapi/
+      itu-datahub-openapi.yml (OpenAPI 3.1.0, 18 operations) and openapi/itu-proximity-openapi.yml
+      (OpenAPI 3.1.0, 2 operations) were written by API Evangelist from live anonymous probes of the
+      real endpoints on 2026-07-26 — every path, parameter, status code and response shape was
+      observed, and each carries an x-apievangelist-provenance block recording
+      provider_published_spec: false. ITU has not published, reviewed or endorsed them.
   camara:
     posture: >-
       No CAMARA implementation and no CAMARA reference found on ITU infrastructure. ITU is a UN
@@ -260,7 +270,26 @@ sources:
   note: ITU-T Recommendations — PDF documents, no machine-readable API artifacts.
 actions:
   apisListed: 2
-  openapiDirectoryCreated: false
+  openapiDirectoryCreated: true
+  openapiDerivedNotHarvested: true
   reason: >-
-    Two real, live-confirmed APIs are listed. No OpenAPI exists to harvest, so the openapi/
-    directory is intentionally omitted rather than populated with anything derived or invented.
+    Two real, live-confirmed APIs are listed. No OpenAPI exists to harvest anywhere on ITU
+    infrastructure, so both specs in openapi/ are derived from observed live responses and labelled
+    as such. Nothing is invented: every operation was called, and the enrichment round also captured
+    17 real captured response examples in examples/ alongside the specs.
+  enrichmentRound: '2026-07-26'
+  enrichmentFinds:
+  - >-
+    ITU publishes a genuine llms.txt at https://bbmaps.itu.int/llms.txt (4,891 bytes, text/plain) —
+    the only machine-readable, AI-facing document on any ITU host, saved verbatim at
+    llms/itu-bbmaps-llms.txt. It was missed in round one because only /.well-known/ paths were
+    probed on that host.
+  - >-
+    That llms.txt declares a third API, "Layer Catalog: /api/getLayerCatalog", which no anonymous
+    path serves — /api/getLayerCatalog 301s to a marketing page and the lowercase form returns a
+    SharePoint HTML page. Recorded as declared-but-unreachable in well-known/itu-well-known.yml
+    rather than listed as an API.
+  - >-
+    Both Proximity routes were re-confirmed end to end with ITU's published sample_api.csv, and the
+    generated ZIP was downloaded and opened: the output CSV carries X,Y,proximity with observed
+    values "within 10km" and ">100km".

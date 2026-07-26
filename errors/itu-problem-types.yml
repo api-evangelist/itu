@@ -1,0 +1,87 @@
+generated: '2026-07-26'
+method: derived
+source: live error probes of both APIs, 2026-07-26
+format: none
+format_note: >-
+  ITU publishes no error reference and neither API uses RFC 9457 problem+json. Three unrelated error
+  shapes are in play across two runtimes (AWS API Gateway and Azure Functions), and several
+  not-found conditions are not signalled as errors at all. Every entry below was produced by an
+  actual probe; nothing is inferred.
+problems:
+- status: 403
+  title: Missing Authentication Token
+  api: ITU DataHub API
+  media_type: application/json
+  body: '{"message":"Missing Authentication Token"}'
+  cause: >-
+    The path is not a configured AWS API Gateway route. Despite the wording this is NOT an
+    authentication failure — every configured route answers anonymously. It is API Gateway's
+    generic response for an unmatched path, and it is also what the /v2 base path itself returns.
+  remediation: >-
+    Check the path against the route list in openapi/itu-datahub-openapi.yml. Do not attempt to add
+    a credential; there is none to add.
+  evidence:
+  - { url: 'https://api.datahub.itu.int/v2/nosuchroute', status: 403 }
+  - { url: 'https://api.datahub.itu.int/v2', status: 403 }
+- status: 500
+  title: Unhandled runtime error on an unknown identifier
+  api: ITU DataHub API
+  media_type: text/plain
+  body: "Cannot set properties of undefined (setting 'availableCountries')"
+  cause: >-
+    An unknown codeID passed to /dictionaries/getbyid/{codeID} reaches application code that assumes
+    a record was found. The raw JavaScript TypeError is returned to the caller as the response body.
+  remediation: >-
+    Resolve codeIDs from getIndicatorCategories before calling getIndicatorById. Treat any 500 on
+    this route as "no such indicator" rather than as a service outage.
+  source_operation: openapi/itu-datahub-openapi.yml#getIndicatorById
+  evidence:
+  - { url: 'https://api.datahub.itu.int/v2/dictionaries/getbyid/999999999', status: 500 }
+  note: >-
+    Leaking an internal stack-level message is a real defect, not a documented contract. It may
+    change without notice.
+- status: 401
+  title: Missing or invalid function key
+  api: ITU Proximity to Fibre Node API
+  media_type: none
+  body: ''
+  cause: The ?code= query parameter was absent or did not match a valid Azure Functions key.
+  remediation: >-
+    Supply the function key ITU embeds in its public web client at https://bbmaps.itu.int/web10km/.
+    There is no signup path to obtain a key of your own.
+  evidence:
+  - { url: 'https://bbmaps.itu.int/functionproximity/route-calcdistancetonode', status: 401, note: no code parameter }
+  - { url: 'https://bbmaps.itu.int/functionproximity/route-calcdistancetonode?code=bogus', status: 401, note: invalid key }
+- status: 500
+  title: CSV missing required columns
+  api: ITU Proximity to Fibre Node API
+  media_type: text/plain
+  body: "Error in import_csv_distance: CSV file is missing required columns: ['X', 'Y']"
+  cause: >-
+    The POSTed text/csv body does not carry a header row with the required X and Y columns. Returned
+    as 500 rather than 400 — a client input error surfaced as a server error.
+  remediation: >-
+    Send a CSV whose first line is exactly `X,Y`. ITU publishes a working sample at
+    https://www.itu.int/en/ITU-D/Technology/Documents/sample_api.csv (saved in this repo at
+    sandbox/itu-proximity-sample.csv).
+  source_operation: openapi/itu-proximity-openapi.yml#calcDistanceToNode
+  evidence:
+  - { url: 'https://bbmaps.itu.int/functionproximity/route-calcdistancetonode?code=<key>', status: 500, note: body "nope" }
+non_error_conditions:
+- status: 200
+  title: Empty array for an unknown or dataless identifier
+  api: ITU DataHub API
+  detail: >-
+    The DataHub API does not signal "not found". An unknown codeID, an unrecognised ISO code, and a
+    valid identifier with no data all return HTTP 200 with an empty JSON array. Callers cannot
+    distinguish a bad request from a genuine data gap.
+  evidence:
+  - { url: 'https://api.datahub.itu.int/v2/data/bycode/999999999', status: 200, body: '[]' }
+  - { url: 'https://api.datahub.itu.int/v2/data/bycode/11624/byiso/ZZZ', status: 200, body: '[]' }
+  - { url: 'https://api.datahub.itu.int/v2/idi/data/bycountryid/840', status: 200, body: '[]' }
+absent:
+- RFC 9457 problem+json
+- a documented error reference
+- stable machine-readable error codes
+- a 404 on unknown resources
+- consistent error media types across the two APIs

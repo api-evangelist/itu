@@ -1,0 +1,53 @@
+[
+  {
+    "codeID": 11624,
+    "shortName": "Aruba",
+    "dataID": 4790044,
+    "dataNote": "",
+    "dataYear": 2000,
+    "code": "i99H",
+    "dataSource": "Servicio di Telecomunicacion di Aruba (SETAR).",
+    "answer": [
+      {
+        "value": "15.4428229480349",
+        "id": 4790044
+      }
+    ],
+    "countryID": 4,
+    "isoCode": "ABW"
+  },
+  {
+    "dataYear": 2001,
+    "shortName": "Aruba",
+    "dataNote": "",
+    "isoCode": "ABW",
+    "code": "i99H",
+    "dataID": 4790045,
+    "codeID": 11624,
+    "dataSource": "ITU estimate.",
+    "answer": [
+      {
+        "value": "17.1",
+        "id": 4790045
+      }
+    ],
+    "countryID": 4
+  },
+  {
+    "code": "i99H",
+    "dataID": 4790046,
+    "shortName": "Aruba",
+    "codeID": 11624,
+    "answer": [
+      {
+        "value": "18.8",
+        "id": 4790046
+      }
+    ],
+    "dataNote": "",
+    "dataYear": 2002,
+    "dataSource": "ITU estimate.",
+    "isoCode": "ABW",
+    "countryID": 4
+  }
+]

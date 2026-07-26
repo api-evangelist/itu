@@ -1,0 +1,94 @@
+[
+  {
+    "codeID": 1,
+    "code": "IDI",
+    "children": [
+      {
+        "codeDesc": "Universal connectivity score",
+        "codeID": 2,
+        "code": "U",
+        "label": "Universal connectivity",
+        "children": [
+          {
+            "codeDesc": "Individuals using the Internet (%)",
+            "codeID": 3,
+            "code": "i99H",
+            "label": "Internet users"
+          },
+          {
+            "codeDesc": "Households with Internet access at home (%)",
+            "codeID": 4,
+            "code": "xHH6_IDI",
+            "label": "Households with Internet"
+          },
+          {
+            "codeDesc": "Active mobile broadband subscriptions per 100 inhabitants",
+            "codeID": 5,
+            "code": "i911mw_IDI",
+            "label": "Mobile broadband penetration"
+          }
+        ]
+      },
+      {
+        "codeDesc": "Meaningful connectivity score",
+        "codeID": 6,
+        "code": "M",
+        "label": "Meaningful connectivity",
+        "children": [
+          {
+            "codeDesc": "3G and 4G/LTE network coverage",
+            "codeID": 7,
+            "code": "Coverage",
+            "label": "Mobile broadband coverage",
+            "children": [
+              {
+                "codeDesc": "Population covered by at least a 3G mobile network (%)",
+                "codeID": 8,
+                "code": "i271G_IDI",
+                "label": "3G population coverage"
+              },
+              {
+                "codeDesc": "Population covered by at least a 4G/LTE mobile network (%)",
+                "codeID": 9,
+                "code": "i271GA_IDI",
+                "label": "4G population coverage"
+              }
+            ]
+          },
+          {
+            "codeDesc": "Mobile broadband Internet traffic per subscription (GB)",
+            "codeID": 10,
+            "code": "i136mwi_subs_IDI",
+            "label": "Mobile broadband traffic"
+          },
+          {
+            "codeDesc": "Fixed broadband Internet traffic per subscription (GB)",
+            "codeID": 11,
+            "code": "i135tfb_subs_IDI",
+            "label": "Fixed broadband traffic"
+          },
+          {
+            "codeDesc": "Mobile data and voice high-consumption basket price (% GNI p.c.)",
+            "codeID": 12,
+            "code": "i271mb_high_ts_GNI_IDI",
+            "label": "Mobile broadband affordability"
+          },
+          {
+            "codeDesc": "Fixed-broadband Internet basket price (% GNI p.c.)",
+            "codeID": 13,
+            "code": "i154_FBB_ts_GNI_IDI",
+            "label": "Fixed broadband affordability"
+          },
+          {
+            "codeDesc": "Individuals owning a mobile phone (%)",
+            "codeID": 14,
+            "code": "xHH18_IDI",
+            "label": "Mobile phone owners"
+          }
+        ]
+      }
+    ],
+    "codeDesc": "ICT Development Index score",
+    "label": "ICT Development Index"
+  }
+]

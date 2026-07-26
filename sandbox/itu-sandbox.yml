@@ -1,0 +1,76 @@
+generated: '2026-07-26'
+method: searched
+source: https://www.itu.int/en/ITU-D/Technology/Documents/sample_api.csv
+note: >-
+  ITU publishes no sandbox, no test environment, and no test/live key separation. There is only one
+  environment — production — and it is anonymous, so "testing" means calling the live API. The one
+  genuine test fixture ITU publishes anywhere is the sample CSV linked from the ITU-D Proximity API
+  demonstration page, saved verbatim in this repo. Everything below is either that published fixture
+  or a live-confirmed safe call; no test value is invented.
+environments:
+- name: production
+  api: ITU DataHub API
+  base_url: https://api.datahub.itu.int/v2
+  credential: none
+  detail: >-
+    No separate sandbox. Every call hits production. The surface is read-only in practice — the CORS
+    preflight advertises OPTIONS,GET only — so exploratory calls are non-destructive.
+- name: production
+  api: ITU Proximity to Fibre Node API
+  base_url: https://bbmaps.itu.int/functionproximity
+  credential: 'apiKey in query (?code=), embedded in ITU''s public web client at https://bbmaps.itu.int/web10km/'
+  detail: >-
+    No separate sandbox and no test key. Calls generate a real result ZIP on ITU infrastructure, so
+    they consume ITU compute — keep batches small when exploring.
+fixtures:
+- name: ITU published proximity sample
+  file: itu-proximity-sample.csv
+  source: https://www.itu.int/en/ITU-D/Technology/Documents/sample_api.csv
+  published_by: ITU
+  media_type: text/csv
+  detail: >-
+    ITU's own sample input for both proximity routes. A header row `X,Y` followed by coordinate
+    pairs. Confirmed 2026-07-26 to produce HTTP 200 and a real result ZIP on both
+    route-calcdistancetonode and route-calc10kmintersection.
+  confirmed_output:
+    route: route-calcdistancetonode
+    response: a plain-text URL to a ZIP under https://bbmaps.itu.int/api/output/
+    zip_contains: 'one CSV named exported_data_<YYYYMMDD>_<HHMMSS>_<uuid>.csv'
+    csv_header: X,Y,proximity
+    observed_values: ['within 10km', '>100km']
+safe_probe_calls:
+  detail: >-
+    Small, live-confirmed DataHub calls suitable for smoke-testing an integration without pulling a
+    megabyte. All returned HTTP 200 anonymously on 2026-07-26.
+  calls:
+  - { operation: listUmcMacros, url: 'https://api.datahub.itu.int/v2/umc/macro/all', bytes: 96 }
+  - { operation: listUmcTopics, url: 'https://api.datahub.itu.int/v2/umc/topic/all', bytes: 206 }
+  - { operation: listUmcTargets, url: 'https://api.datahub.itu.int/v2/umc/target/all', bytes: 265 }
+  - { operation: listIdiVersions, url: 'https://api.datahub.itu.int/v2/idi/dashboard/version', bytes: 21 }
+  - { operation: listDatasets, url: 'https://api.datahub.itu.int/v2/methodology/dataset', bytes: 888 }
+  - { operation: listRegions, url: 'https://api.datahub.itu.int/v2/region/all', bytes: 1408 }
+reference_identifiers:
+  detail: >-
+    Real identifiers confirmed to resolve, useful as integration-test constants. Read from live
+    responses, not chosen arbitrarily.
+  values:
+  - { name: codeID, value: 11624, meaning: 'Individuals using the Internet (ITU code i99H)', confirmed_on: [getIndicatorById, getDataByCode, getDataByCodeAndIso, getRegionalAggregate] }
+  - { name: iso, value: USA, meaning: United States, confirmed_on: [getDataByCodeAndIso] }
+  - { name: countryID, value: 244, meaning: 'United States (ITU numeric id, from listCountries)', confirmed_on: [getUmcByCountry] }
+  - { name: countryID, value: 4, meaning: 'Aruba (ITU numeric id)', confirmed_on: [listCountries] }
+  - { name: regionID, value: 3, meaning: 'Arab States (ITU/BDT Classification)', confirmed_on: [getRegionalAggregate, getIdiByRegion] }
+negative_test_values:
+  detail: Live-confirmed inputs that exercise each documented failure mode. See errors/itu-problem-types.yml.
+  values:
+  - { input: 'codeID=999999999 on getDataByCode', result: 'HTTP 200, empty array — not a 404' }
+  - { input: 'iso=ZZZ on getDataByCodeAndIso', result: 'HTTP 200, empty array' }
+  - { input: 'codeID=999999999 on getIndicatorById', result: 'HTTP 500, plain-text JavaScript TypeError' }
+  - { input: 'Proximity POST with no ?code=', result: 'HTTP 401, empty body' }
+  - { input: 'Proximity POST with body "nope"', result: 'HTTP 500, "CSV file is missing required columns: [''X'', ''Y'']"' }
+absent:
+- test/live key prefixes or modes
+- a sandbox or staging host
+- test clocks or time simulation
+- fixture or trigger tooling
+- a mock server
+- a Postman collection

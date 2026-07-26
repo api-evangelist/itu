@@ -1,0 +1,79 @@
+generated: '2026-07-26'
+method: derived
+source: live probes + openapi/itu-datahub-openapi.yml, openapi/itu-proximity-openapi.yml
+note: >-
+  ITU operates two live public APIs with no lifecycle contract whatsoever. There is no versioning
+  policy, no deprecation policy, no sunset signalling, no SLA, no status page, no changelog and no
+  support channel for either. This artifact records that absence with evidence, because for a
+  standards body that publishes the world's telecom Recommendations the gap is the story.
+versioning:
+  scheme: uri-path
+  current: v2
+  policy_url: null
+  detail: >-
+    The DataHub API carries /v2 in its base path. No /v1 is reachable, no version negotiation header
+    was observed, and ITU has published nothing describing what v2 means, what changed from v1, or
+    what would trigger a v3. The Proximity API is entirely unversioned.
+  apis:
+  - { api: ITU DataHub API, versioned: true, version: v2 }
+  - { api: ITU Proximity to Fibre Node API, versioned: false }
+data_versioning:
+  detail: >-
+    Distinct from API versioning and easy to confuse. GET /v2/idi/dashboard/version returns the
+    ICT Development Index EDITION years available — [2023, 2024, 2025, 2026] as of 2026-07-26. This
+    is the closest thing ITU offers to a release signal on this surface, and it versions the DATA,
+    not the interface.
+  endpoint: openapi/itu-datahub-openapi.yml#listIdiVersions
+  record_timestamps: >-
+    Aggregate and UMC records carry createDate/updateDate fields (ISO 8601 on /aggregation/*, epoch
+    milliseconds on /umc/dashboard/all), which is the only per-record freshness signal available.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No deprecation policy exists. No Sunset (RFC 8594) or Deprecation (RFC 9745) header was observed
+    on any response. No operation in either OpenAPI is marked deprecated, because ITU has never
+    marked one. Note the `archive: true|false` field on dashboard, UMC and indicator records — that
+    retires DATA SERIES, not operations, and is the only retirement concept present anywhere.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  detail: No service level agreement, uptime commitment, or support tier is published for either API.
+status_page:
+  url: null
+  detail: >-
+    No status page. status.itu.int does not resolve (DNS failure, curl exit 000). No third-party
+    status host was found for either api.datahub.itu.int or bbmaps.itu.int. There is no channel on
+    which ITU would announce an outage of these APIs.
+changelog:
+  url: null
+  detail: >-
+    No API changelog. ITU publishes news at https://www.itu.int/hub/ and the ITU-D statistics reports
+    at https://www.itu.int/itu-d/reports/statistics/, both of which announce DATA releases (new IDI
+    editions, new Facts and Figures) — but neither has ever announced an API change.
+support:
+  developer_channel: null
+  detail: >-
+    No developer support channel. The nearest real contacts are the dataset owner mailboxes returned
+    by the API itself via GET /v2/methodology/dataset — indicators@itu.int for the ICT Data &
+    Analytics Division (WTI dataset) and treg@itu.int for the Regulatory & Market Environment
+    Division. These are statistics enquiry addresses, not API support.
+  contacts:
+  - { email: indicators@itu.int, division: ICT DATA & ANALYTICS DIVISION, source: 'GET /v2/methodology/dataset' }
+  - { email: treg@itu.int, division: REGULATORY & MARKET ENVIRONMENT DIVISION, source: 'GET /v2/methodology/dataset' }
+  - { url: 'https://www.itu.int/home/contact/index.html', note: general ITU contact page }
+stability_assessment:
+  rating: unstable-by-omission
+  detail: >-
+    Neither API is a declared product. The DataHub surface is the private backend of a Next.js
+    portal that happens to be publicly reachable; the Proximity surface is labelled a demonstration
+    by ITU itself. Any route, field name, or embedded function key can change without notice or
+    announcement, and there is no channel on which such a change would be communicated. Callers
+    should pin nothing, cache aggressively, and monitor their own integration.
+evidence:
+- { url: 'https://status.itu.int', status: '000', note: does not resolve }
+- { url: 'https://api.datahub.itu.int/v2/idi/dashboard/version', status: 200, note: 'returns [2023,2024,2025,2026]' }
+- { url: 'https://api.datahub.itu.int/v2/methodology/dataset', status: 200, note: source of the division contact emails }
+- { url: 'https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx', status: 200, note: ITU calls the Proximity API a demonstration }

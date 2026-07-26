@@ -1,0 +1,37 @@
+[
+  {
+    "regionID": 3,
+    "dataID": 2026003005,
+    "codeID": 5,
+    "score": 56.355555555555554,
+    "dataYear": 2026
+  },
+  {
+    "dataID": 2026003010,
+    "regionID": 3,
+    "codeID": 10,
+    "score": 73.57222222222222,
+    "dataYear": 2026
+  },
+  {
+    "codeID": 14,
+    "regionID": 3,
+    "score": 87.60555555555555,
+    "dataYear": 2026,
+    "dataID": 2026003014
+  },
+  {
+    "regionID": 3,
+    "score": 79.25555555555556,
+    "codeID": 3,
+    "dataID": 2026003003,
+    "dataYear": 2026
+  },
+  {
+    "codeID": 13,
+    "score": 84.28888888888889,
+    "regionID": 3,
+    "dataID": 2026003013,
+    "dataYear": 2026
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "updateDate": 1673908119058,
+    "indicatorLabel": "Individuals aged 15+ using the Internet",
+    "label": "Internet users",
+    "codeID": 11624,
+    "source": "ITU",
+    "archive": false,
+    "topicID": 1,
+    "macroID": 1,
+    "code": "i99H",
+    "createDate": 1673908119058,
+    "targetMinValue": 0,
+    "units": "%",
+    "targetDesc": "Target is considered met if at least 95% of individuals use the Internet",
+    "targetMaxValue": 100,
+    "codeDesc": "Refers to the proportion of individuals who used the Internet from any location in the last three months. Access can be via a fixed or mobile network.",
+    "targetName": "Internet users"
+  },
+  {
+    "updateDate": 1679331110876,
+    "indicatorLabel": "Households with Internet access at home",
+    "label": "Homes connected",
+    "codeID": 12047,
+    "source": "ITU",
+    "archive": false,
+    "topicID": 2,
+    "macroID": 1,
+    "code": "xHH6_IDI",
+    "createDate": 1679331110876,
+    "targetMinValue": 0,
+    "units": "%",
+    "targetDesc": "The target is met if at least 95% of households have Internet access.",
+    "targetMaxValue": 100,
+    "codeDesc": "Refers to the proportion of households with Internet access at home. Access can be via a fixed or mobile network. If one member of the household has a mobile phone with connection to the Internet and makes it available for all members, then it should be considered that the household has access to the Internet.",
+    "targetName": "Homes connected"
+  }
+]

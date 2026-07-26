@@ -1,0 +1,153 @@
+openapi: 3.1.0
+info:
+  title: ITU Proximity to Fibre Node API
+  version: '1'
+  summary: ITU-D batch geospatial API scoring coordinates against the ITU Broadband Maps fibre network.
+  description: >-
+    ITU-D publishes this API as a **demonstration** on a single page — "API - Proximity to Fibre
+    Node" — with a sample CSV and a prose explanation, but no base URL, no endpoint reference, no
+    parameter table, and no OpenAPI. This document is an API Evangelist **observed-behaviour**
+    description: both routes, the `code` query parameter, the `text/csv` request contract, the
+    plain-text ZIP-URL response, and every status code below were confirmed with live calls on
+    2026-07-26 using ITU's own published `sample_api.csv`.
+
+
+    The routes and their function keys were recovered from ITU's public web client at
+    `https://bbmaps.itu.int/web10km/`, which hardcodes both. The service runs on Azure Functions;
+    access is by a function key passed as `?code=`, and because ITU embeds that key in a public
+    client the surface is effectively open — there is no signup path to obtain a key of your own.
+
+
+    The API is **batch and asynchronous in shape**: you POST a CSV body of coordinates and receive a
+    plain-text URL to a generated ZIP under `https://bbmaps.itu.int/api/output/`, which contains a
+    CSV with your input rows plus the computed column.
+  contact:
+    name: ITU Telecommunication Development Bureau (BDT)
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  license:
+    name: ITU Terms of Use
+    url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+  x-apievangelist-provenance:
+    method: derived
+    derived_from: >-
+      the ITU-D demonstration page, the public bbmaps.itu.int/web10km client bundle, and live
+      confirmed calls with ITU's published sample_api.csv
+    probed: '2026-07-26'
+    provider_published_spec: false
+externalDocs:
+  description: ITU-D "API - Proximity to Fibre Node" demonstration page
+  url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+servers:
+- url: https://bbmaps.itu.int/functionproximity
+  description: Production (Azure Functions).
+tags:
+- name: Proximity
+  description: Batch proximity scoring of coordinates against the ITU Interactive Transmission Map.
+paths:
+  /route-calcdistancetonode:
+    post:
+      operationId: calcDistanceToNode
+      tags: [Proximity]
+      summary: Score coordinates by proximity range to the nearest fibre node
+      description: >-
+        Accepts a CSV of coordinates and returns the proximity band from each point to the nearest
+        terrestrial fibre node in the ITU Broadband Maps data — for example `within 10km` or
+        `>100km`. ITU's own client labels this "Proximity range to nearest Fiber node".
+
+
+        The response body is a bare URL (plain text) to a generated ZIP containing one CSV with the
+        original `X` and `Y` columns plus a `proximity` column.
+      security:
+      - functionKey: []
+      requestBody:
+        required: true
+        description: >-
+          CSV with a header row and the required columns `X` (longitude) and `Y` (latitude). ITU
+          publishes a working sample at
+          https://www.itu.int/en/ITU-D/Technology/Documents/sample_api.csv
+        content:
+          text/csv:
+            schema: { type: string }
+            examples:
+              sample:
+                summary: ITU's published sample_api.csv (first rows)
+                value: |
+                  X,Y
+                  12.077916619646288,-15.22124972669551
+                  22.361249911846286,-11.80458307369551
+                  12.086249952946288,-15.21291639339551
+      responses:
+        '200':
+          $ref: '#/components/responses/ResultUrl'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ProcessingError'
+  /route-calc10kmintersection:
+    post:
+      operationId: calc10kmIntersection
+      tags: [Proximity]
+      summary: Flag coordinates within 10km of a fibre node
+      description: >-
+        Accepts a CSV of coordinates and returns, for each point, whether it falls within 10km of a
+        terrestrial fibre node — ITU's client documents the output as `in10km: 0 = no, 1 = yes`.
+        The binary form of `calcDistanceToNode`, and the surface behind the Broadband Maps
+        "population within reach of fibre node" layers.
+      security:
+      - functionKey: []
+      requestBody:
+        required: true
+        description: CSV with a header row and the required columns `X` (longitude) and `Y` (latitude).
+        content:
+          text/csv:
+            schema: { type: string }
+            examples:
+              sample:
+                value: |
+                  X,Y
+                  12.077916619646288,-15.22124972669551
+                  22.361249911846286,-11.80458307369551
+      responses:
+        '200':
+          $ref: '#/components/responses/ResultUrl'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ProcessingError'
+components:
+  securitySchemes:
+    functionKey:
+      type: apiKey
+      in: query
+      name: code
+      description: >-
+        Azure Functions function key. ITU embeds a working key per route in its public web client at
+        https://bbmaps.itu.int/web10km/, so the surface is effectively open — there is no
+        registration, no self-service key issuance, and no documented rotation policy. Treat the
+        embedded key as a demonstration credential ITU may change without notice.
+  responses:
+    ResultUrl:
+      description: >-
+        A bare URL, as `text/plain`, to a generated ZIP of results under
+        https://bbmaps.itu.int/api/output/. The ZIP contains one CSV named
+        `exported_data_<YYYYMMDD>_<HHMMSS>_<uuid>.csv`.
+      content:
+        text/plain:
+          schema: { type: string, format: uri }
+          examples:
+            generated:
+              value: https://bbmaps.itu.int/api/output/exported_data_20260726_023009_8c5a21de-f1f8-4c53-a499-ccd98b137037.zip
+    Unauthorized:
+      description: >-
+        Returned with an empty body when the `code` query parameter is missing or does not match a
+        valid function key. Confirmed on both an absent key and a bogus key.
+    ProcessingError:
+      description: >-
+        Returned as plain text when the CSV body cannot be processed — most commonly a missing
+        required column. Not RFC 9457 problem+json.
+      content:
+        text/plain:
+          schema: { type: string }
+          examples:
+            missingColumns:
+              value: "Error in import_csv_distance: CSV file is missing required columns: ['X', 'Y']"

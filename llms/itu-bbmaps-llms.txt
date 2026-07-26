@@ -1,0 +1,63 @@
+# BBMaps - ITU Infrastructure Connectivity Map (BBmaps)
+
+> BBMaps (Broadband Maps) is a platform by the International Telecommunication Union (ITU) that provides interactive visualization of ICT infrastructure and connectivity data worldwide. It promotes information sharing and usage of geospatial data, geospatial tools, and capacity building activities and training programs to support countries, industry, and communities at large to reduce connectivity gaps, in particular in developing countries.
+
+The platform is hosted at https://bbmaps.itu.int and consists of several applications, services, and activities aiming at improving connectivity for all:
+
+## Applications
+
+### BBMaps - Infrastructure Connectivity Map (Main App)
+- URL: https://bbmaps.itu.int/bbmaps (also accessible at https://bbmaps.itu.int/app)
+- The primary application providing interactive maps for visualizing global ICT infrastructure and Internet transmission networks, including terrestrial fiber optic and microwave networks, submarine cables, mobile coverage, internet exchange points, datacenters, satellite earth stations, school connectivity, and broadband development indicators.
+- Users can explore broadband connectivity data by country and region. It shares information on ITU data available through the ITU Datahub (https://datahub.itu.int), as well as other information such as National Mapping Systems and other indicators through the STATs menu of the platform.
+- Built by ITU's Telecommunication Development Bureau (BDT).
+
+#### Data Categories
+- **Transmission Networks**: Terrestrial fiber optic and microwave links (operational, under construction, planned), network nodes and hub analysis.
+- **Submarine Cables**: Cable routes (operational and planned), landing points, with attributes such as name, length, capacity, owners, and RFS date.
+- **Mobile Coverage**: 2G, 3G, 4G, and 5G coverage maps.
+- **Quality of Service**: Ookla Speedtest data (fixed and mobile) including average download/upload speed, latency, total tests, and devices.
+- **Other Infrastructure**: Internet Exchange Points (IXPs), datacenters (PeeringDB, Microsoft Cloud), and satellite earth stations.
+- **School Connectivity**: Data for selected countries
+- **Population**: Population density (global raster), population within reach of fiber node at 10 km, 25 km, and 50 km ranges.
+- **Country Indicators** (per country on click): ITU Datahub link, National Broadband Mapping Systems survey, terrestrial networks mapped (fiber and microwave km), population reach to fiber node, ITU Regulatory Tracker, G5 Benchmark, ITU Unified Framework, and Global Cybersecurity Index.
+
+#### API
+- Layer Catalog: /api/getLayerCatalog
+
+### Toolkit Portal
+- URL: https://bbmaps.itu.int/toolkit
+- A portal that collects various tools and publications related to broadband mapping and ICT infrastructure development.
+
+### BDT GeoCatalogue
+- URL: https://bbmaps.itu.int/geocatalogue/ (also accessible at https://bbmaps.itu.int/geonetwork/)
+- A geospatial metadata catalogue to promote key geospatial data of ICT Infrastructure.
+- Provides searchable access to geospatial datasets related to ICT infrastructure.
+
+### Validation Portal
+- URL: https://bbmaps.itu.int/validation/
+- A content management portal (CMS) used for validating and curating data on terrestrial transmission networks collected by ITU research on terrestrial fibre networks.
+- Used for research and quality assurance of BBMaps data.
+
+### AI Tools for Broadband Mapping
+- URL: https://www.itu.int/go/emergingtech4dev
+- The AI tools developed under the BBMaps framework aim to improve access to guides and information powered by AI technologies.
+- For instance, when logged into the BBMaps portal, a RAG chatbot is available. Also, a Proof of Concept app allows experimenting with Machine Learning models trained on telecommunication towers to detect infrastructure, available at https://bbmaps.itu.int/sat-img
+
+### Training App
+- URL: https://bbmaps.itu.int/training-app/
+- A web application to support learning for connectivity analysis.
+- Provides training materials and interactive exercises for users working with broadband mapping data.
+
+### Tailored and industry specific Maps - Case FIGI Mexico Map
+- URL: https://bbmaps.itu.int/figi/
+- A specialized map application for the Financial Inclusion Global Initiative (FIGI) project in Mexico.
+- Visualizes ICT infrastructure layers relevant to financial inclusion.
+
+
+## About ITU
+The International Telecommunication Union (ITU) is the United Nations specialized agency for information and communication technologies. BBMaps is a project of the ITU Telecommunication Development Bureau (BDT), which supports developing countries in building and improving their ICT infrastructure.
+
+## Contact
+- Website: https://www.itu.int
+- BBMaps main page: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx

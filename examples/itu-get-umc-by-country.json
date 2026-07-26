@@ -1,0 +1,40 @@
+[
+  {
+    "topicID": 1,
+    "macroID": 1,
+    "code": "i99H",
+    "targetMinValue": 0,
+    "label": "Internet users",
+    "units": "%",
+    "codeID": 11624,
+    "source": "ITU",
+    "archive": false,
+    "targetDesc": "Target is considered met if at least 95% of individuals use the Internet",
+    "targetMaxValue": 100,
+    "targetName": "Internet users",
+    "macroTarget": "Universal connectivity",
+    "topicTarget": "People",
+    "rawMaxValue": 100,
+    "rawMinValue": 0,
+    "answer": []
+  },
+  {
+    "topicID": 2,
+    "macroID": 1,
+    "code": "xHH6_IDI",
+    "targetMinValue": 0,
+    "label": "Homes connected",
+    "units": "%",
+    "codeID": 12047,
+    "source": "ITU",
+    "archive": false,
+    "targetDesc": "The target is met if at least 95% of households have Internet access.",
+    "targetMaxValue": 100,
+    "targetName": "Homes connected",
+    "macroTarget": "Universal connectivity",
+    "topicTarget": "Homes",
+    "rawMaxValue": 100,
+    "rawMinValue": 0,
+    "answer": []
+  }
+]

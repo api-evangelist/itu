@@ -1,0 +1,59 @@
+generated: '2026-07-26'
+method: derived
+source: mcp/itu-mcp.yml, openapi/itu-datahub-openapi.yml, openapi/itu-proximity-openapi.yml
+note: >-
+  ITU operates no MCP server and no GraphQL surface, so there is no provider-side divergence to
+  reconcile. This crosswalk binds the CANDIDATE tool set in mcp/itu-mcp.yml to its backing OpenAPI
+  operations one-to-one, so every candidate tool inherits a real inputSchema from a real operation's
+  parameters rather than a guessed one. Confidence is high throughout because both sides were
+  authored from the same live-probed evidence.
+surfaces:
+  openapi:
+  - { file: openapi/itu-datahub-openapi.yml, operations: 18, gated: false, note: anonymous }
+  - { file: openapi/itu-proximity-openapi.yml, operations: 2, gated: partial, note: 'apiKey in query; key embedded in ITU''s public web client' }
+  graphql:
+    endpoint: null
+    note: No /graphql surface exists on itu.int, datahub.itu.int or bbmaps.itu.int.
+  mcp:
+    url: null
+    published: false
+    note: Candidate only. ITU publishes no MCP server; tools/list could not be called because no server exists.
+crosswalk:
+- { tool: list_countries, category: Reference, rest: [listCountries], binding: rest, confidence: high }
+- { tool: list_regions, category: Reference, rest: [listRegions], binding: rest, confidence: high }
+- { tool: get_indicator_categories, category: Indicators, rest: [getIndicatorCategories], binding: rest, confidence: high }
+- { tool: get_indicator, category: Indicators, rest: [getIndicatorById], binding: rest, confidence: high }
+- { tool: get_indicator_series, category: Data, rest: [getDataByCode], binding: rest, confidence: high, note: 'Large response (~1.1 MB); no pagination available.' }
+- { tool: get_country_series, category: Data, rest: [getDataByCodeAndIso], binding: rest, confidence: high }
+- { tool: get_regional_aggregate, category: Data, rest: [getRegionalAggregate], binding: rest, confidence: high }
+- { tool: list_dashboards, category: Dashboards, rest: [listDashboards], binding: rest, confidence: high }
+- { tool: get_idi_structure, category: IDI, rest: [getIdiStructure], binding: rest, confidence: high }
+- { tool: list_idi_versions, category: IDI, rest: [listIdiVersions], binding: rest, confidence: high }
+- { tool: get_idi_by_country, category: IDI, rest: [getIdiByCountry], binding: rest, confidence: high, note: 'Keys on ITU CountryID, not ISO code.' }
+- { tool: get_idi_by_region, category: IDI, rest: [getIdiByRegion], binding: rest, confidence: high }
+- { tool: get_umc_dashboard, category: UMC, rest: [getUmcDashboard], binding: rest, confidence: high }
+- { tool: list_umc_topics, category: UMC, rest: [listUmcTopics], binding: rest, confidence: high }
+- { tool: list_umc_macros, category: UMC, rest: [listUmcMacros], binding: rest, confidence: high }
+- { tool: list_umc_targets, category: UMC, rest: [listUmcTargets], binding: rest, confidence: high }
+- { tool: get_umc_by_country, category: UMC, rest: [getUmcByCountry], binding: rest, confidence: high, note: 'Keys on ITU CountryID, not ISO code.' }
+- { tool: list_datasets, category: Methodology, rest: [listDatasets], binding: rest, confidence: high }
+- { tool: proximity_to_fibre_node, category: Proximity, rest: [calcDistanceToNode], binding: rest, confidence: high, note: 'Input is a text/csv body, not JSON parameters — an MCP wrapper must accept coordinate rows and serialise them to CSV.' }
+- { tool: within_10km_of_fibre_node, category: Proximity, rest: [calc10kmIntersection], binding: rest, confidence: high, note: 'Same CSV-body contract as calcDistanceToNode.' }
+mcp_only: []
+rest_only: []
+declared_but_unbound:
+- surface: BBMaps Layer Catalog
+  declared_at: https://bbmaps.itu.int/llms.txt
+  route: /api/getLayerCatalog
+  reason: >-
+    ITU advertises this route in its own llms.txt but no public path serves JSON — /api/getLayerCatalog
+    returns a 301 to a marketing page and the lowercase form returns an ITU SharePoint HTML page. Not
+    modelled in OpenAPI and not exposed as a tool because no anonymous call returned data. See
+    well-known/itu-well-known.yml.
+coverage:
+  tools_named: 20
+  tools_bound: 20
+  mcp_only: 0
+  rest_operations_total: 20
+  rest_operations_with_tool: 20
+  binding_rate: '100%'

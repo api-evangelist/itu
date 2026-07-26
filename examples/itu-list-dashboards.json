@@ -1,0 +1,169 @@
+[
+  {
+    "dashboardName": "Fixed and mobile subscriptions",
+    "dashboardCategory": "Thematic",
+    "dashboardID": 2,
+    "archive": false,
+    "dashboardDesc": "Overview of the penetration of mobile and fixed subscriptions (narrow and broadband).",
+    "dashboardCodes": [
+      {
+        "code": "i271mw",
+        "category": "Connectivity",
+        "categorySort": 1,
+        "codeID": 11632,
+        "disagregation": [
+          {
+            "endYear": 2025,
+            "label": "Active mobile-broadband subscriptions",
+            "codeID": 12066,
+            "group": null,
+            "answerType": "Number",
+            "code": "i911mw",
+            "categorySort": 1,
+            "codeVisibility": "Public/Free",
+            "units": "per 100 people",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the sum of active handset-based and computer-based (USB/dongles) mobile-broadband subscriptions that allow access to the Internet, divided by population and multiplied by 100",
+            "startYear": 1960
+          }
+        ]
+      },
+      {
+        "code": "i112",
+        "category": "Connectivity",
+        "categorySort": 1,
+        "codeID": 15,
+        "disagregation": [
+          {
+            "endYear": 2025,
+            "label": "Fixed-telephone subscriptions",
+            "codeID": 391,
+            "group": null,
+            "answerType": "Number",
+            "code": "i91",
+            "categorySort": 1,
+            "codeVisibility": "Public/Free",
+            "units": "per 100 people",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the sum of all active analogue fixed-telephone lines, voice-over-IP (VoIP) subscriptions, fixed wireless local loop (WLL) subscriptions, ISDN voice-channel equivalents, fixed public payphones and satellite-based subscriptions provided to fixed locations that allow for a voice communication divided by population and multiplied by 100",
+            "startYear": 1960
+          }
+        ]
+      },
+      {
+        "code": "i271",
+        "category": "Connectivity",
+        "categorySort": 1,
+        "codeID": 178,
+        "disagregation": [
+          {
+            "endYear": 2025,
+            "label": "Mobile-cellular subscriptions",
+            "codeID": 392,
+            "group": null,
+            "answerType": "Number",
+            "code": "i911",
+            "categorySort": 1,
+            "codeVisibility": "Public/Free",
+            "units": "per 100 people",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the number of subscriptions to a public mobile-telephone service that provide access to the public switched telephone network (PSTN) using cellular technology. It includes the number of postpaid subscriptions and the number of active prepaid accounts, divided by population and multiplied by 100",
+            "startYear": 1960
+          }
+        ]
+      },
+      {
+        "collection": "Population coverage, by mobile network technology",
+        "collectionID": 100095,
+        "category": "Connectivity",
+        "categorySort": 1,
+        "components": [
+          {
+            "endYear": 2025,
+            "label": "At least 2G",
+            "codeID": 194,
+            "group": null,
+            "answerType": "Number",
+            "code": "i271pop",
+            "categorySort": 1,
+            "codeVisibility": "Internal",
+            "units": "%",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the percentage of inhabitants within range of a mobile-cellular signal, irrespective of whether or not they are subscribers or users",
+            "startYear": 1960
+          },
+          {
+            "endYear": 2025,
+            "label": "At least 3G",
+            "codeID": 430,
+            "group": null,
+            "answerType": "Number",
+            "code": "i271G",
+            "categorySort": 1,
+            "codeVisibility": "Internal",
+            "units": "%",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the percentage of inhabitants that are within range of at least a 3G mobile-cellular signal, irrespective of whether or not they are subscribers ",
+            "startYear": 2003
+          },
+          {
+            "endYear": 2025,
+            "label": "At least LTE/WiMAX",
+            "codeID": 19306,
+            "group": null,
+            "answerType": "Number",
+            "code": "i271GA",
+            "categorySort": 1,
+            "codeVisibility": "Internal",
+            "units": "%",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the percentage of inhabitants that are within range of at least a 4G/ LTE mobile-cellular signal, irrespective of whether or not they are subscribers",
+            "startYear": 2012
+          },
+          {
+            "endYear": 2025,
+            "label": "At least 5G",
+            "codeID": 34236,
+            "group": null,
+            "answerType": "Number",
+            "code": "i271G5_pop",
+            "categorySort": 1,
+            "codeVisibility": "Public/Free",
+            "units": "%",
+            "category": "Connectivity",
+            "databaseID": 1,
+            "codeDesc": "Refers to the percentage of inhabitants that are within range of at least a 5G mobile-cellular signal, irrespective of whether or not they are subscribers ",
+            "startYear": 2018
+          }
+        ]
+      },
+      {
+        "endYear": 2025,
+        "indicatorCategorySort": 0,
+        "disaggregationSort": 0,
+        "collection": null,
+        "label": "Fixed-broadband subscriptions",
+        "codeID": 19303,
+        "group": null,
+        "answerType": "Number",
+        "code": "i992b",
+        "categorySort": 1,
+        "codeVisibility": "Internal",
+        "units": "per 100 people",
+        "category": "Connectivity",
+        "databaseID": 1,
+        "parentCodeID": -1,
+        "collectionID": -1,
+        "codeDesc": "Refers to fixed subscriptions to high-speed access to the public Internet (a TCP/IP connection), at downstream speeds equal to, or greater than, 256 kbit/s divided by population and multiplied by 100",
+        "parentCode": null,
+        "startYear": 1960
+      }
+    ]
+  }
+]

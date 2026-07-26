@@ -1,0 +1,81 @@
+generated: '2026-07-26'
+method: searched
+source: live probes of every ITU host in apis.yml and every OpenAPI servers[] host
+note: >-
+  ITU serves no /.well-known/ discovery surface. Absence is the finding. The only 200s came from
+  bbmaps.itu.int, whose Azure front door answers 200 with an EMPTY body for any /.well-known/ path —
+  a catch-all, not a document. The one genuine machine-readable file ITU publishes on that host is
+  /llms.txt, which is real and is saved verbatim in this repo.
+hosts:
+- host: https://www.itu.int
+  documents:
+  - { path: /.well-known/security.txt, status: 404 }
+  - { path: /.well-known/openid-configuration, status: 404 }
+  - { path: /.well-known/oauth-authorization-server, status: 404 }
+  - { path: /.well-known/oauth-protected-resource, status: 404 }
+  - { path: /.well-known/api-catalog, status: 404 }
+  - { path: /.well-known/ai-plugin.json, status: 404 }
+  - { path: /llms.txt, status: 404 }
+  - { path: /robots.txt, status: 200, note: standard crawl directives only; no API or spec references }
+- host: https://datahub.itu.int
+  documents:
+  - { path: /.well-known/security.txt, status: 403 }
+  - { path: /.well-known/openid-configuration, status: 403 }
+  - { path: /.well-known/oauth-authorization-server, status: 403 }
+  - { path: /.well-known/oauth-protected-resource, status: 403 }
+  - { path: /.well-known/api-catalog, status: 403 }
+  - { path: /.well-known/ai-plugin.json, status: 403 }
+  - { path: /robots.txt, status: 403 }
+  - { path: /llms.txt, status: 403 }
+  note: >-
+    The portal host answers 403 to non-browser clients across the board (bot protection), including
+    for its own root. Not evidence of a gated discovery surface, just of a WAF.
+- host: https://api.datahub.itu.int
+  documents:
+  - { path: /.well-known/security.txt, status: 403 }
+  - { path: /.well-known/openid-configuration, status: 403 }
+  - { path: /.well-known/oauth-authorization-server, status: 403 }
+  - { path: /.well-known/oauth-protected-resource, status: 403 }
+  - { path: /.well-known/api-catalog, status: 403 }
+  - { path: /.well-known/ai-plugin.json, status: 403 }
+  - { path: /robots.txt, status: 403 }
+  - { path: /llms.txt, status: 403 }
+  note: >-
+    AWS API Gateway returns {"message":"Missing Authentication Token"} with HTTP 403 for every path
+    that is not a configured route. No /.well-known/ routes are configured.
+- host: https://bbmaps.itu.int
+  documents:
+  - { path: /.well-known/security.txt, status: 200, note: empty body — Azure front-door catch-all, not a document }
+  - { path: /.well-known/openid-configuration, status: 200, note: empty body — catch-all }
+  - { path: /.well-known/oauth-authorization-server, status: 200, note: empty body — catch-all }
+  - { path: /.well-known/oauth-protected-resource, status: 200, note: empty body — catch-all }
+  - { path: /.well-known/api-catalog, status: 200, note: empty body — catch-all }
+  - { path: /.well-known/ai-plugin.json, status: 200, note: empty body — catch-all }
+  - { path: /robots.txt, status: 200 }
+  - path: /llms.txt
+    status: 200
+    file: ../llms/itu-bbmaps-llms.txt
+    content_type: text/plain
+    bytes: 4891
+    note: >-
+      GENUINE. ITU's own llms.txt for the BBMaps platform — describes the applications, the data
+      categories, and declares a "Layer Catalog" API at /api/getLayerCatalog. The only
+      machine-readable, AI-facing document ITU publishes anywhere on its infrastructure.
+absent:
+- security.txt (RFC 9116)
+- openid-configuration (OIDC discovery)
+- oauth-authorization-server (RFC 8414)
+- oauth-protected-resource (RFC 9728)
+- api-catalog (RFC 9727)
+- ai-plugin.json
+declared_but_unreachable:
+- claim: 'BBMaps llms.txt declares: "#### API — Layer Catalog: /api/getLayerCatalog"'
+  probes:
+  - { url: 'https://bbmaps.itu.int/api/getLayerCatalog', status: 301, note: redirects to the ITU-D Interactive Transmission Maps marketing page }
+  - { url: 'https://bbmaps.itu.int/api/getlayercatalog', status: 200, note: returns the ITU SharePoint HTML page, not JSON }
+  - { url: 'https://bbmaps.itu.int/bbmaps/api/getLayerCatalog', status: 404 }
+  - { url: 'https://bbmaps.itu.int/app/api/getLayerCatalog', status: 404 }
+  note: >-
+    ITU advertises this route in its own llms.txt but no public path serves it — it is presumably
+    reachable only from an authenticated BBMaps session. Recorded as declared-but-unreachable rather
+    than listed as an API, since no anonymous call returned data.

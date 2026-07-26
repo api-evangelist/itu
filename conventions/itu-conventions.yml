@@ -1,0 +1,125 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/itu-datahub-openapi.yml, openapi/itu-proximity-openapi.yml + live probes
+note: >-
+  ITU documents no API conventions anywhere — there is no style guide, no design standard, no
+  developer portal. Everything below was observed from live calls on 2026-07-26. Several rows record
+  the ABSENCE of a convention, which is itself the finding: this is an internal backend exposed
+  publicly, not a designed public API.
+apis:
+- name: ITU DataHub API
+  base_url: https://api.datahub.itu.int/v2
+  infrastructure: AWS API Gateway behind CloudFront
+- name: ITU Proximity to Fibre Node API
+  base_url: https://bbmaps.itu.int/functionproximity
+  infrastructure: Azure Functions
+authentication:
+  style: none (DataHub) / apiKey in query (Proximity)
+  detail: >-
+    DataHub requires no credential. Proximity requires ?code=<function key>, with a working key
+    embedded in ITU's public web client.
+  artifact: authentication/itu-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    No idempotency contract. The DataHub API is read-only (GET and OPTIONS only, per the CORS
+    preflight), so idempotency is inherent rather than contractual. The Proximity API is a POST that
+    generates a NEW result ZIP with a new timestamped UUID filename on every call — repeating a
+    request produces a different resource URL, so it is explicitly non-idempotent and offers no
+    idempotency key.
+pagination:
+  supported: false
+  style: none
+  detail: >-
+    No pagination of any kind. Every DataHub collection endpoint returns its complete result set in
+    one array with no limit, offset, cursor, page or count parameter and no envelope. This is a real
+    ergonomics problem at scale: /country/all returns ~134 KB and /data/bycode/11624 returns ~1.1 MB
+    in a single response. The only way to reduce a payload is to use a narrower route —
+    /data/bycode/{codeID}/byiso/{iso} instead of /data/bycode/{codeID}.
+filtering:
+  style: path-segment
+  detail: >-
+    Filtering is expressed as additional path segments rather than query parameters — /byiso/{iso},
+    /bycountryid/{id}, /byregionid/{id}. No query-string filtering was observed on any route.
+response_envelope:
+  style: bare array
+  detail: >-
+    Every DataHub endpoint returns a bare JSON array at the top level. There is no wrapper object,
+    no metadata block, no total count, no links and no self-reference. Field naming is inconsistent
+    across endpoints — /country/all uses PascalCase (CountryID, IsoCode, ShortName) while every
+    other endpoint uses camelCase (codeID, isoCode, shortName).
+  content_type: application/json
+error_envelope:
+  style: inconsistent
+  detail: >-
+    There is no error envelope. Three different shapes were observed: a JSON
+    {"message":"Missing Authentication Token"} from API Gateway on unrouted paths (403); a bare
+    plain-text JavaScript runtime string on an unknown identifier (500); and an empty body on a
+    missing key (401). Not RFC 9457. Several "not found" conditions are not errors at all — an
+    unknown codeID or ISO code returns HTTP 200 with an empty array.
+  artifact: errors/itu-problem-types.yml
+empty_and_missing:
+  detail: >-
+    Callers must treat an empty array as the ambiguous case: it means either "no data for this
+    valid identifier" or "this identifier does not exist". The API does not distinguish them.
+versioning:
+  scheme: uri-path
+  current: v2
+  detail: >-
+    The DataHub API carries /v2 in its base path. No v1 is reachable and no version negotiation
+    header was observed. The Proximity API is unversioned. Separately, /idi/dashboard/version
+    returns DATA edition years ([2023, 2024, 2025, 2026]) — this is content versioning of the ICT
+    Development Index, not API versioning, and is easy to confuse.
+  artifact: lifecycle/itu-lifecycle.yml
+rate_limits:
+  published: false
+  headers_observed: []
+  detail: >-
+    No rate-limit headers of any kind on any response — no X-RateLimit-*, no RateLimit-*, no
+    Retry-After. No published quota, no terms of programmatic use. Callers have no signal and no
+    contract; the only prudent posture is conservative self-throttling and caching.
+request_tracing:
+  supported: partial
+  headers:
+  - { header: x-amzn-requestid, api: ITU DataHub API, note: AWS API Gateway request id, returned on every response }
+  - { header: x-amz-apigw-id, api: ITU DataHub API }
+  - { header: x-amzn-trace-id, api: ITU DataHub API, note: X-Ray trace id }
+  - { header: x-amz-cf-id, api: ITU DataHub API, note: CloudFront request id }
+  detail: >-
+    Trace identifiers exist but only as infrastructure defaults. ITU documents no support channel
+    that would accept one, so their practical value to a caller is limited to correlating retries.
+caching:
+  detail: >-
+    Responses are served through CloudFront (x-cache: Miss from cloudfront observed). No
+    Cache-Control, ETag or Last-Modified header was observed on the sampled responses, so
+    conditional requests are not available. Client-side caching is strongly advised given the
+    payload sizes and the absence of pagination.
+cors:
+  enabled: true
+  detail: >-
+    access-control-allow-origin: * and access-control-allow-credentials: true on every DataHub
+    response. An OPTIONS preflight on /v2/country/all advertises
+    access-control-allow-methods: OPTIONS,GET and allows Content-Type, X-Amz-Date, Authorization,
+    X-Api-Key, X-Amz-Security-Token, X-Amz-User-Agent and X-Amzn-Trace-Id request headers. The API
+    is directly callable from browser JavaScript.
+media_types:
+  request:
+  - { media_type: text/csv, api: ITU Proximity to Fibre Node API, note: required; the body is the coordinate file itself }
+  response:
+  - { media_type: application/json, api: ITU DataHub API }
+  - { media_type: 'text/plain; charset=utf-8', api: ITU Proximity to Fibre Node API, note: the body is a bare URL to a generated ZIP }
+async_pattern:
+  api: ITU Proximity to Fibre Node API
+  detail: >-
+    Batch-in / artifact-out. The POST returns a URL to a generated ZIP under
+    https://bbmaps.itu.int/api/output/ containing a CSV of the input rows plus one computed column
+    (`proximity` for calcDistanceToNode). There is no job id, no status endpoint, no callback and no
+    documented retention policy for the generated artifact — the caller must fetch the ZIP and
+    assume it may disappear.
+cross_links:
+  authentication: authentication/itu-authentication.yml
+  errors: errors/itu-problem-types.yml
+  lifecycle: lifecycle/itu-lifecycle.yml
+  data_model: data-model/itu-data-model.yml
+  conformance: conformance/itu-conformance.yml

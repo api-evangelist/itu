@@ -1,0 +1,43 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the ITU Proximity to Fibre Node API
+  version: 1.0.0
+extends: openapi/itu-proximity-openapi.yml
+x-apievangelist-note: >-
+  ITU presents this API as a demonstration on a single ITU-D page with no reference documentation.
+  The document this overlay extends was derived by API Evangelist from that page, from ITU's public
+  web client, and from confirmed live calls. This overlay carries the operating annotations.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provenance: derived from ITU's demonstration page + public web client + live confirmed calls, 2026-07-26
+    x-apievangelist-stability: demonstration — ITU's own wording; may be withdrawn without notice
+    x-apievangelist-support: none published
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/itu-authentication.yml
+      conventions: conventions/itu-conventions.yml
+      errors: errors/itu-problem-types.yml
+      sandbox: sandbox/itu-sandbox.yml
+      skills: skills/_index.yml
+- target: $.components.securitySchemes.functionKey
+  update:
+    x-apievangelist-key-warning: >-
+      The function key is embedded in ITU's public web client, so it is a shared demonstration
+      credential rather than a per-consumer secret. There is no signup, no rotation policy, and no
+      notice channel — an integration will break silently if ITU rotates it.
+- target: $.paths['/route-calcdistancetonode'].post
+  update:
+    x-apievangelist-async-warning: >-
+      Batch-in / artifact-out. The response is a bare URL to a generated ZIP; there is no job id, no
+      status endpoint, no callback, and no documented retention for the artifact. Fetch the ZIP
+      immediately and persist it yourself.
+    x-apievangelist-error-warning: >-
+      A malformed CSV returns HTTP 500, not 400. A missing or invalid ?code= returns HTTP 401 with
+      an empty body.
+- target: $.paths['/route-calc10kmintersection'].post
+  update:
+    x-apievangelist-async-warning: >-
+      Same batch-in / artifact-out contract as calcDistanceToNode. Output column is `in10km`
+      (0 = no, 1 = yes) per ITU's own client.

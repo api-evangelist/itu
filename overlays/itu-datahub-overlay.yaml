@@ -1,0 +1,61 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the ITU DataHub API
+  version: 1.0.0
+extends: openapi/itu-datahub-openapi.yml
+x-apievangelist-note: >-
+  ITU publishes no OpenAPI, so the document this overlay extends was itself derived by API
+  Evangelist from live observed responses. This overlay carries the annotations that describe the
+  API's real-world operating conditions — provenance, the absence of a lifecycle contract, and the
+  identifier and payload traps a consumer will hit — separately from the description of the surface
+  itself.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provenance: derived from live anonymous probes, 2026-07-26
+    x-apievangelist-stability: unstable-by-omission
+    x-apievangelist-support: none published
+    x-apievangelist-terms: no terms of programmatic use published
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/itu-authentication.yml
+      conventions: conventions/itu-conventions.yml
+      errors: errors/itu-problem-types.yml
+      lifecycle: lifecycle/itu-lifecycle.yml
+      conformance: conformance/itu-conformance.yml
+      data_model: data-model/itu-data-model.yml
+      mcp: mcp/itu-mcp.yml
+      skills: skills/_index.yml
+- target: $.servers[0]
+  update:
+    x-apievangelist-rate-limits: none published; no rate-limit headers returned. Self-throttle.
+    x-apievangelist-cors: 'access-control-allow-origin: * — callable directly from a browser.'
+- target: $.paths['/data/bycode/{codeID}'].get
+  update:
+    x-apievangelist-payload-warning: >-
+      Returns the full cross-country series in one unpaginated array — roughly 1.1 MB for codeID
+      11624. Prefer getDataByCodeAndIso where a single country is needed.
+- target: $.paths['/idi/data/bycountryid/{countryID}'].get
+  update:
+    x-apievangelist-identity-warning: >-
+      Keys on the numeric ITU CountryID from listCountries, NOT the ISO 3166-1 code. Supplying an
+      ISO code or an unknown id returns HTTP 200 with an empty array rather than an error.
+- target: $.paths['/umc/bycountryid/{countryID}'].get
+  update:
+    x-apievangelist-identity-warning: >-
+      Keys on the numeric ITU CountryID from listCountries, NOT the ISO 3166-1 code.
+- target: $.paths['/dictionaries/getbyid/{codeID}'].get
+  update:
+    x-apievangelist-error-warning: >-
+      An unknown codeID returns HTTP 500 with a raw JavaScript TypeError string in the body. Treat
+      it as "no such indicator", and resolve codeIDs from getIndicatorCategories first.
+- target: $.components.schemas.DataPoint
+  update:
+    x-apievangelist-type-warning: >-
+      answer[].value is a STRING on this schema but a NUMBER on AggregatePoint. Parse defensively.
+- target: $.components.schemas.Country
+  update:
+    x-apievangelist-naming-warning: >-
+      This is the only endpoint using PascalCase field names (CountryID, IsoCode, ShortName). Every
+      other DataHub response uses camelCase.

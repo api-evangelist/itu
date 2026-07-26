@@ -1,0 +1,153 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/itu-datahub-openapi.yml, openapi/itu-proximity-openapi.yml + live probes
+note: >-
+  ITU makes no conformance claim for either API — it publishes no design guide, no compliance
+  statement and no certification for its own programmatic surfaces. Every assertion below is derived
+  from observed behaviour. The irony is recorded deliberately: ITU authors the ITU-T Recommendations
+  that define interoperable telecommunications, and conforms to almost none of the modern web-API
+  standards on its own APIs.
+standards:
+- id: rest-json
+  conforms: true
+  evidence: Both APIs are HTTP/JSON or HTTP/CSV over TLS 1.3 with resource-oriented paths.
+- id: openapi
+  conforms: false
+  evidence: >-
+    ITU publishes no OpenAPI or Swagger document. Probed and negative on every host:
+    api.datahub.itu.int/{,v2/}{openapi.json,swagger.json,api-docs,docs,redoc} all return 403 API
+    Gateway MissingAuthenticationToken (no such route); www.itu.int/openapi.json returns 404. The
+    two specs in openapi/ were derived by API Evangelist from observed responses.
+- id: oauth2
+  conforms: false
+  evidence: No OAuth2 anywhere. No securityScheme of type oauth2, no token endpoint, no scopes.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on www.itu.int and is unrouted on api.datahub.itu.int.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: No /.well-known/oauth-authorization-server on any host.
+- id: rfc9728-oauth-protected-resource
+  conforms: false
+  evidence: No /.well-known/oauth-protected-resource on any host.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are returned as bare AWS API Gateway JSON, bare plain-text runtime strings, or empty
+    bodies. No application/problem+json on any response. See errors/itu-problem-types.yml.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: No /.well-known/security.txt on www.itu.int (404), datahub.itu.int or api.datahub.itu.int.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: No /.well-known/api-catalog on any host.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header observed; no deprecation policy exists.
+- id: rfc6585-rate-limiting
+  conforms: false
+  evidence: No RateLimit-* / X-RateLimit-* headers and no 429 behaviour documented or observed.
+- id: rfc7231-status-semantics
+  conforms: partial
+  evidence: >-
+    Status codes are used inconsistently. Unknown resources return 200 with an empty array instead
+    of 404; a malformed client CSV returns 500 instead of 400; and AWS returns 403
+    "Missing Authentication Token" for an unrouted path on an API that requires no authentication.
+- id: cors
+  conforms: true
+  evidence: >-
+    access-control-allow-origin:* on every DataHub response, with an OPTIONS preflight advertising
+    access-control-allow-methods: OPTIONS,GET.
+- id: http2
+  conforms: true
+  evidence: Both api.datahub.itu.int and bbmaps.itu.int negotiate HTTP/2.
+- id: tls13
+  conforms: true
+  evidence: TLS 1.3 on www.itu.int, datahub.itu.int and api.datahub.itu.int. See security/itu-domain-security.yml.
+- id: hsts
+  conforms: false
+  evidence: No Strict-Transport-Security header observed on www.itu.int. See security/itu-domain-security.yml.
+- id: dnssec
+  conforms: false
+  evidence: itu.int is not DNSSEC-signed. See security/itu-domain-security.yml.
+- id: spf
+  conforms: true
+  evidence: itu.int publishes an SPF record.
+- id: dmarc
+  conforms: true
+  evidence: itu.int publishes DMARC with policy reject.
+- id: caa
+  conforms: false
+  evidence: No CAA record on itu.int.
+- id: iso3166
+  conforms: true
+  evidence: >-
+    Country identity is carried as ISO 3166-1 alpha-3 (IsoCode on /v2/country/all; the {iso} path
+    parameter on /v2/data/bycode/{codeID}/byiso/{iso}).
+- id: un-m49
+  conforms: true
+  evidence: >-
+    /v2/region/all and the Regions array on /v2/country/all carry UN M49 groupings alongside ITU/BDT
+    classifications and World Bank income classes.
+- id: sdmx
+  conforms: false
+  evidence: >-
+    The reference standard for statistical data exchange, and the natural fit for a UN agency's
+    indicator API — but the DataHub API exposes a bespoke JSON shape, not SDMX-JSON, and no SDMX
+    endpoint was found. Notably ITU's peer UN and OECD statistical agencies do publish SDMX.
+- id: json-api
+  conforms: false
+  evidence: Bare top-level arrays, no envelope, no links, no type/id members.
+- id: odata
+  conforms: false
+  evidence: No $filter/$select/$top query surface; filtering is by path segment only.
+- id: ogc-api
+  conforms: false
+  evidence: >-
+    The Proximity API is geospatial but exposes no OGC API Features/Processes surface, no GeoJSON,
+    and no WFS/WMS — it takes a CSV and returns a URL to a ZIP.
+- id: geojson
+  conforms: false
+  evidence: Coordinates are exchanged as bare X,Y CSV columns, not GeoJSON.
+- id: asyncapi
+  conforms: false
+  evidence: No event, streaming or webhook surface exists. Not applicable rather than deficient.
+- id: graphql
+  conforms: false
+  evidence: No /graphql endpoint on itu.int, datahub.itu.int or bbmaps.itu.int.
+- id: grpc
+  conforms: false
+  evidence: No published .proto; github.com/ITUINT has 0 public repositories.
+- id: mcp
+  conforms: false
+  evidence: ITU publishes no MCP server. See mcp/itu-mcp.yml for a derived candidate surface.
+- id: llms-txt
+  conforms: partial
+  evidence: >-
+    ITU publishes a genuine llms.txt at https://bbmaps.itu.int/llms.txt covering the BBMaps
+    platform — saved verbatim at llms/itu-bbmaps-llms.txt. No llms.txt on www.itu.int (404) or
+    datahub.itu.int. This is the single modern agent-facing standard ITU has adopted anywhere.
+- id: camara
+  conforms: false
+  evidence: >-
+    No CAMARA implementation and no CAMARA reference on ITU infrastructure. CAMARA is a Linux
+    Foundation project with the GSMA Operator Platform Group; ITU is not a participant.
+- id: gsma-open-gateway
+  conforms: false
+  evidence: An operator commitment programme; ITU is not a mobile network operator.
+- id: tmforum-open-api
+  conforms: false
+  evidence: >-
+    No TM Forum Open API conformance certification. ITU's own telecom standards track is the ITU-T
+    Recommendation series, published as PDF at https://www.itu.int/en/ITU-T/publications/Pages/recs.aspx
+    and never as OpenAPI or JSON Schema.
+compliance_program:
+  published: false
+  certifications: []
+  trust_center: null
+  detail: >-
+    No trust center, no SOC 2 / ISO 27001 / PCI / HIPAA / FedRAMP claim, and no vulnerability
+    disclosure programme were found for ITU's API surfaces. As a UN specialized agency ITU operates
+    under its own treaty and privilege framework rather than commercial certification, so the
+    absence is expected — but it means there is no published security posture a consumer can rely
+    on. Verified by probe 2026-07-25/26; see security/itu-domain-security.yml.

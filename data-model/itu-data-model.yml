@@ -1,0 +1,172 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/itu-datahub-openapi.yml + observed live responses
+note: >-
+  The DataHub entity graph, derived from the schemas in the OpenAPI and from the id-reference fields
+  actually present in live responses. ITU publishes no object reference, so every relationship below
+  was read off real payloads. The graph is a classic statistical star: a fact table (DataPoint) keyed
+  by an indicator dimension (Indicator), a geography dimension (Country / Region) and time (dataYear).
+identity_warning: >-
+  Three different identifier spaces coexist and are easy to confuse. `codeID` is a numeric indicator
+  id; `code` is ITU's short indicator string (e.g. "i99H") and is NOT unique across databases;
+  `CountryID` is a numeric ITU country id while `IsoCode` is ISO 3166-1 alpha-3. The IDI and UMC
+  country endpoints key on CountryID, the data endpoints filter by IsoCode. Passing the wrong one
+  returns HTTP 200 with an empty array rather than an error.
+entities:
+- name: Country
+  description: A country or economy in the ITU reference set.
+  primary_key: CountryID
+  alternate_keys: [IsoCode]
+  source_operation: listCountries
+  relationships:
+  - { type: has_many, target: CountryRegion, via: Regions, note: embedded array on the country record }
+  - { type: has_many, target: DataPoint, via: countryID }
+  - { type: has_many, target: IdiScore, via: countryID, note: 'via getIdiByCountry' }
+  - { type: has_many, target: UmcCountryScore, via: countryID, note: 'via getUmcByCountry' }
+- name: CountryRegion
+  description: A country's membership in one regional grouping. The join between Country and Region.
+  primary_key: id
+  source_operation: listCountries
+  relationships:
+  - { type: belongs_to, target: Country }
+  - { type: belongs_to, target: Region, via: regionCode }
+  - { type: belongs_to, target: RegionClass, via: classID }
+- name: Region
+  description: A regional grouping — ITU/BDT classification, UN M49, or World Bank income class.
+  primary_key: regionID
+  alternate_keys: [regionCode]
+  source_operation: listRegions
+  relationships:
+  - { type: belongs_to, target: RegionClass, via: className }
+  - { type: has_many, target: AggregatePoint, via: regionID }
+  - { type: has_many, target: IdiScore, via: regionID }
+- name: RegionClass
+  description: >-
+    The classification family a region belongs to. Not a standalone endpoint — inferred from the
+    className / class / classID fields carried on Region and CountryRegion records. Observed values
+    include "ITU/BDT Classification", "UN M49 Developed-developing", "UN M49 LLDC SIDS",
+    "WB_Income2022", "WB_Income2023" and "World, no regions".
+  primary_key: classID
+  derived: true
+- name: Indicator
+  description: >-
+    A statistical indicator ITU collects. The dictionary entry that gives a codeID its meaning,
+    units, coverage years and country availability.
+  primary_key: codeID
+  alternate_keys: [code]
+  source_operation: getIndicatorById
+  relationships:
+  - { type: belongs_to, target: IndicatorCategory, via: category }
+  - { type: belongs_to, target: Dataset, via: databaseID }
+  - { type: has_many, target: DataPoint, via: codeID }
+  - { type: has_many, target: Indicator, via: disaggregation, note: 'self-reference — disaggregated child series' }
+  - { type: has_many, target: Indicator, via: sibling, note: 'self-reference — related series' }
+  - { type: has_many, target: Country, via: availableCountries, note: 'coverage list embedded on the definition' }
+- name: IndicatorCategory
+  description: The category / sub-category tree that organises the indicator dictionary.
+  primary_key: category
+  source_operation: getIndicatorCategories
+  relationships:
+  - { type: has_many, target: IndicatorSubCategory, via: subCategory }
+  - { type: has_many, target: Indicator, via: 'subCategory[].items' }
+- name: DataPoint
+  description: >-
+    The fact table. One observation of one indicator for one country in one year, with the reporting
+    source and any note.
+  primary_key: dataID
+  source_operation: getDataByCode, getDataByCodeAndIso
+  relationships:
+  - { type: belongs_to, target: Indicator, via: codeID }
+  - { type: belongs_to, target: Country, via: countryID }
+  - { type: belongs_to, target: Country, via: isoCode, note: 'redundant second foreign key to the same entity' }
+  dimensions: [codeID, countryID, dataYear]
+  measure: answer[].value
+  measure_note: Returned as a STRING on this endpoint, not a number. Callers must parse.
+- name: AggregatePoint
+  description: ITU's computed regional aggregate of an indicator for one year.
+  primary_key: dataID
+  source_operation: getRegionalAggregate
+  relationships:
+  - { type: belongs_to, target: Indicator, via: codeID }
+  - { type: belongs_to, target: Region, via: regionID }
+  - { type: belongs_to, target: RegionClass, via: classID }
+  - { type: belongs_to, target: Dataset, via: databaseID }
+  dimensions: [codeID, regionID, dataYear]
+  measure: answer[].value
+  measure_note: Returned as a NUMBER here, unlike DataPoint. The inconsistency is real.
+- name: Dashboard
+  description: A curated DataHub dashboard and the indicator codes it renders.
+  primary_key: dashboardID
+  source_operation: listDashboards
+  relationships:
+  - { type: has_many, target: Indicator, via: 'dashboardCodes[].codeID' }
+- name: IdiNode
+  description: >-
+    A node in the ICT Development Index composite tree — the index, its Universal and Meaningful
+    connectivity pillars, and the indicators beneath each.
+  primary_key: codeID
+  source_operation: getIdiStructure
+  relationships:
+  - { type: has_many, target: IdiNode, via: children, note: 'self-referencing tree' }
+  - { type: belongs_to, target: Indicator, via: code, note: 'leaf nodes carry the ITU indicator code, e.g. i99H' }
+- name: IdiScore
+  description: A computed IDI score for one node, one geography and one edition year.
+  primary_key: dataID
+  source_operation: getIdiByCountry, getIdiByRegion
+  relationships:
+  - { type: belongs_to, target: IdiNode, via: codeID }
+  - { type: belongs_to, target: Region, via: regionID }
+  - { type: belongs_to, target: Country, via: countryID }
+  dimensions: [codeID, regionID or countryID, dataYear]
+  measure: score
+- name: UmcIndicator
+  description: A Universal and Meaningful Connectivity indicator with the target it is measured against.
+  primary_key: codeID
+  source_operation: getUmcDashboard
+  relationships:
+  - { type: belongs_to, target: UmcTopic, via: topicID }
+  - { type: belongs_to, target: UmcMacro, via: macroID }
+  - { type: belongs_to, target: Indicator, via: code }
+- name: UmcCountryScore
+  description: One UMC indicator scored for one country against its target band.
+  source_operation: getUmcByCountry
+  relationships:
+  - { type: belongs_to, target: UmcIndicator, via: codeID }
+  - { type: belongs_to, target: Country, via: countryID }
+  - { type: belongs_to, target: UmcTopic, via: topicID }
+  - { type: belongs_to, target: UmcMacro, via: macroID }
+- name: UmcTopic
+  description: One of six UMC topics — People, Homes, Businesses, Affordability, Schools, Infrastructure.
+  primary_key: topicID
+  source_operation: listUmcTopics
+  relationships:
+  - { type: has_many, target: UmcIndicator, via: topicID }
+- name: UmcMacro
+  description: One of two UMC macro categories — Universal connectivity, Meaningful connectivity.
+  primary_key: macroID
+  source_operation: listUmcMacros
+  relationships:
+  - { type: has_many, target: UmcIndicator, via: macroID }
+- name: UmcTarget
+  description: A UMC scoring band with its numeric range — No data, Limited, Satisfactory, Advanced, Target met.
+  primary_key: targetID
+  source_operation: listUmcTargets
+- name: Dataset
+  description: >-
+    A source dataset behind DataHub, with the owning ITU division and its contact email. The
+    provenance root of the whole graph.
+  primary_key: datasetID
+  source_operation: listDatasets
+  relationships:
+  - { type: has_many, target: Indicator, via: databaseID }
+resolution_paths:
+- name: Indicator value for a country
+  steps: [getIndicatorCategories, getIndicatorById, getDataByCodeAndIso]
+  note: Resolve a label to a codeID, confirm its units and coverage, then fetch the country series.
+- name: Country IDI score
+  steps: [listCountries, getIdiStructure, getIdiByCountry]
+  note: getIdiByCountry needs the numeric CountryID from listCountries, not the ISO code.
+- name: Regional comparison
+  steps: [listRegions, getRegionalAggregate]
+- name: UMC country scorecard
+  steps: [listCountries, listUmcTopics, getUmcByCountry]

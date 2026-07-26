@@ -1,0 +1,26 @@
+[
+  {
+    "topicID": 1,
+    "label": "People"
+  },
+  {
+    "topicID": 2,
+    "label": "Homes"
+  },
+  {
+    "topicID": 3,
+    "label": "Businesses"
+  },
+  {
+    "topicID": 4,
+    "label": "Affordability"
+  },
+  {
+    "topicID": 5,
+    "label": "Schools"
+  },
+  {
+    "topicID": 6,
+    "label": "Infrastructure"
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "category": "Sustainability",
+    "categorySort": 0,
+    "subCategory": [
+      {
+        "subCategory": "Society",
+        "subCategorySort": 0,
+        "items": [
+          {
+            "codeID": 100118,
+            "label": "Individuals with ICT skills: Communication and Collaboration",
+            "databaseID": 8,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          },
+          {
+            "codeID": 100117,
+            "label": "Individuals with ICT skills: Digital content creation",
+            "databaseID": 8,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          },
+          {
+            "codeID": 100116,
+            "label": "Individuals with ICT skills: Information and data literacy",
+            "databaseID": 8,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          },
+          {
+            "codeID": 100120,
+            "label": "Individuals with ICT skills: Safety",
+            "databaseID": 8,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          },
+          {
+            "codeID": 100119,
+            "label": "Individuals with ICT skills: Problem solving",
+            "databaseID": 8,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          },
+          {
+            "codeID": 100121,
+            "label": "Individuals with ICT skills, by skill level",
+            "databaseID": 8,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          },
+          {
+            "databaseID": 1,
+            "label": "Total population",
+            "seriesType": "base",
+            "external": true,
+            "indicatorCategory": "",
+            "indicatorSort": 5,
+            "codeID": 260,
+            "isCollection": false
+          }
+        ]
+      },
+      {
+        "subCategory": "e-Applications",
+        "subCategorySort": 1,
+        "items": [
+          {
+            "codeID": 100090,
+            "label": "Regulatory framework and mandates for e-Applications",
+            "databaseID": 2,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          }
+        ]
+      },
+      {
+        "subCategory": "Economy",
+        "subCategorySort": 2,
+        "items": []
+      },
+      {
+        "subCategory": "Emergency telecommunications",
+        "subCategorySort": 3,
+        "items": [
+          {
+            "codeID": 100083,
+            "label": "Emergency telecommunications",
+            "databaseID": 2,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          }
+        ]
+      },
+      {
+        "subCategory": "Environment & e-waste",
+        "subCategorySort": 4,
+        "items": [
+          {
+            "codeID": 100101,
+            "label": "Environment & e-waste mandates and legal framework",
+            "databaseID": 2,
+            "seriesType": "base",
+            "indicatorSort": 1,
+            "external": false,
+            "isCollection": true
+          }
+        ]
+      }
+    ]
+  }
+]

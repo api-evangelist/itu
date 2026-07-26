@@ -1,0 +1,71 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/itu-datahub-openapi.yml, openapi/itu-proximity-openapi.yml
+probe: true
+probed: '2026-07-26'
+note: >-
+  ITU publishes no authentication documentation of any kind — there is no developer portal, no
+  signup, no key issuance, and no terms of programmatic use. This profile is derived from the two
+  OpenAPI descriptions in this repo plus live anonymous probes of both surfaces.
+summary:
+  types:
+  - none
+  - apiKey
+  api_key_in:
+  - query
+  oauth2_flows: []
+  registration_required: false
+  signup_url: null
+schemes:
+- name: anonymous
+  type: none
+  description: >-
+    The ITU DataHub API requires no credential of any kind. Confirmed 2026-07-26: HTTP 200 on
+    /v2/country/all, /v2/region/all, /v2/dictionaries/getcategories, /v2/umc/topic/all,
+    /v2/idi/dashboard/version and /v2/methodology/dataset with no API key, no Authorization header,
+    no Referer and no Origin. The service returns `access-control-allow-origin: *` and an OPTIONS
+    preflight advertising `access-control-allow-methods: OPTIONS,GET`, so it is callable directly
+    from a browser.
+  apis:
+  - ITU DataHub API
+  sources:
+  - openapi/itu-datahub-openapi.yml
+- name: functionKey
+  type: apiKey
+  in: query
+  parameter: code
+  description: >-
+    Azure Functions function key on the ITU Proximity to Fibre Node API. ITU embeds a working key
+    per route in its public web client at https://bbmaps.itu.int/web10km/, so the surface is
+    effectively open — there is no registration, no self-service key issuance, no scope model and no
+    documented rotation policy. A missing or invalid `code` returns HTTP 401 with an empty body
+    (confirmed 2026-07-26).
+  apis:
+  - ITU Proximity to Fibre Node API
+  sources:
+  - openapi/itu-proximity-openapi.yml
+absent:
+- oauth2
+- openIdConnect
+- mutualTLS
+- http-bearer
+- http-basic
+- CIBA
+evidence:
+- source: https://api.datahub.itu.int/v2/country/all
+  status: 200
+  note: anonymous GET, no headers sent
+- source: https://api.datahub.itu.int/v2/nosuchroute
+  status: 403
+  note: >-
+    AWS API Gateway {"message":"Missing Authentication Token"} on unrouted paths. This is a routing
+    artefact, not an auth requirement — every configured route answers anonymously.
+- source: https://bbmaps.itu.int/functionproximity/route-calcdistancetonode
+  status: 401
+  note: POST with no ?code= parameter; empty body
+- source: https://bbmaps.itu.int/functionproximity/route-calcdistancetonode?code=bogus
+  status: 401
+  note: POST with an invalid key; empty body
+- source: https://www.itu.int/.well-known/openid-configuration
+  status: 404
+  note: no OIDC discovery document on any ITU host

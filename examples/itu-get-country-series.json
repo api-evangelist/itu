@@ -1,0 +1,87 @@
+[
+  {
+    "codeID": 11624,
+    "shortName": "United States",
+    "answer": [
+      {
+        "value": "43.0791626375201",
+        "id": 4792974
+      }
+    ],
+    "dataID": 4792974,
+    "code": "i99H",
+    "isoCode": "USA",
+    "dataNote": "",
+    "dataYear": 2000,
+    "countryID": 244,
+    "dataSource": "ITU estimate."
+  },
+  {
+    "answer": [
+      {
+        "value": "49.0808315896951",
+        "id": 4792975
+      }
+    ],
+    "dataYear": 2001,
+    "countryID": 244,
+    "dataSource": "ITU estimate.",
+    "dataID": 4792975,
+    "code": "i99H",
+    "isoCode": "USA",
+    "dataNote": "",
+    "codeID": 11624,
+    "shortName": "United States"
+  },
+  {
+    "countryID": 244,
+    "shortName": "United States",
+    "dataID": 4792976,
+    "dataYear": 2002,
+    "dataNote": "",
+    "dataSource": "ITU estimate.",
+    "codeID": 11624,
+    "isoCode": "USA",
+    "answer": [
+      {
+        "value": "58.7854038836952",
+        "id": 4792976
+      }
+    ],
+    "code": "i99H"
+  },
+  {
+    "codeID": 11624,
+    "shortName": "United States",
+    "answer": [
+      {
+        "value": "61.6971171244207",
+        "id": 4792977
+      }
+    ],
+    "dataID": 4792977,
+    "code": "i99H",
+    "isoCode": "USA",
+    "dataNote": "",
+    "countryID": 244,
+    "dataYear": 2003,
+    "dataSource": "ITU estimate."
+  },
+  {
+    "codeID": 11624,
+    "dataSource": "ITU estimate.",
+    "dataID": 4792978,
+    "shortName": "United States",
+    "dataYear": 2004,
+    "isoCode": "USA",
+    "answer": [
+      {
+        "value": "64.7582564759896",
+        "id": 4792978
+      }
+    ],
+    "countryID": 244,
+    "dataNote": "",
+    "code": "i99H"
+  }
+]

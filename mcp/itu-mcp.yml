@@ -1,0 +1,103 @@
+generated: '2026-07-26'
+method: derived
+status: candidate
+source: openapi/itu-datahub-openapi.yml, openapi/itu-proximity-openapi.yml
+note: >-
+  ITU publishes NO MCP server. Searched and negative: no mcp.itu.int, nothing on npm under
+  @modelcontextprotocol or an ITU scope, nothing in the official MCP registry, and 0 public
+  repositories in ITU's GitHub organization (github.com/ITUINT). The tool surface below is a
+  CANDIDATE derived by API Evangelist from the two OpenAPI descriptions in this repo — one tool per
+  operation — not a server ITU operates.
+provider_published: false
+server:
+  name: itu
+  transport: http
+  url: null
+  note: >-
+    A candidate server would be trivially safe to operate: 18 of the 20 operations are anonymous
+    reads with no credential, no rate limit and no side effects, and the two writes are batch
+    geospatial computations that generate a disposable artifact.
+tools:
+- name: list_countries
+  description: List every country in the ITU reference set with its ISO 3166-1 alpha-3 code, ITU CountryID and regional groupings.
+  source_operation: openapi/itu-datahub-openapi.yml#listCountries
+- name: list_regions
+  description: List every regional grouping used by ITU — ITU/BDT classification, UN M49, World Bank income classes.
+  source_operation: openapi/itu-datahub-openapi.yml#listRegions
+- name: get_indicator_categories
+  description: Get the complete ITU indicator dictionary as a category tree, to resolve an indicator name to a codeID.
+  source_operation: openapi/itu-datahub-openapi.yml#getIndicatorCategories
+- name: get_indicator
+  description: Get the full definition of one indicator — units, description, coverage years, and which countries have data.
+  source_operation: openapi/itu-datahub-openapi.yml#getIndicatorById
+- name: get_indicator_series
+  description: Get an indicator's full time series across every country. Large response; prefer the country-scoped tool.
+  source_operation: openapi/itu-datahub-openapi.yml#getDataByCode
+- name: get_country_series
+  description: Get an indicator's time series for one country by ISO 3166-1 alpha-3 code. The primary lookup tool.
+  source_operation: openapi/itu-datahub-openapi.yml#getDataByCodeAndIso
+- name: get_regional_aggregate
+  description: Get ITU's computed regional aggregate series for one indicator and one region.
+  source_operation: openapi/itu-datahub-openapi.yml#getRegionalAggregate
+- name: list_dashboards
+  description: List ITU DataHub's curated dashboards and the indicator codes each renders.
+  source_operation: openapi/itu-datahub-openapi.yml#listDashboards
+- name: get_idi_structure
+  description: Get the ICT Development Index composite tree — pillars and the indicators beneath them.
+  source_operation: openapi/itu-datahub-openapi.yml#getIdiStructure
+- name: list_idi_versions
+  description: List the available ICT Development Index edition years.
+  source_operation: openapi/itu-datahub-openapi.yml#listIdiVersions
+- name: get_idi_by_country
+  description: Get ICT Development Index scores for one country by ITU CountryID.
+  source_operation: openapi/itu-datahub-openapi.yml#getIdiByCountry
+- name: get_idi_by_region
+  description: Get ICT Development Index scores aggregated for one region.
+  source_operation: openapi/itu-datahub-openapi.yml#getIdiByRegion
+- name: get_umc_dashboard
+  description: Get every Universal and Meaningful Connectivity indicator with its target definition.
+  source_operation: openapi/itu-datahub-openapi.yml#getUmcDashboard
+- name: list_umc_topics
+  description: List the six UMC topics — People, Homes, Businesses, Affordability, Schools, Infrastructure.
+  source_operation: openapi/itu-datahub-openapi.yml#listUmcTopics
+- name: list_umc_macros
+  description: List the two UMC macro categories — Universal connectivity and Meaningful connectivity.
+  source_operation: openapi/itu-datahub-openapi.yml#listUmcMacros
+- name: list_umc_targets
+  description: List the UMC scoring bands — No data, Limited, Satisfactory, Advanced, Target met.
+  source_operation: openapi/itu-datahub-openapi.yml#listUmcTargets
+- name: get_umc_by_country
+  description: Get every UMC indicator scored for one country against its target.
+  source_operation: openapi/itu-datahub-openapi.yml#getUmcByCountry
+- name: list_datasets
+  description: List the ITU source datasets behind DataHub with their owning division and contact email.
+  source_operation: openapi/itu-datahub-openapi.yml#listDatasets
+- name: proximity_to_fibre_node
+  description: >-
+    Score a batch of coordinates by proximity band to the nearest terrestrial fibre node. Takes a
+    CSV body with X,Y columns; returns a URL to a generated ZIP of results.
+  source_operation: openapi/itu-proximity-openapi.yml#calcDistanceToNode
+- name: within_10km_of_fibre_node
+  description: Flag whether each coordinate in a batch falls within 10km of a terrestrial fibre node.
+  source_operation: openapi/itu-proximity-openapi.yml#calc10kmIntersection
+coverage:
+  operations_total: 20
+  tools_derived: 20
+agent_notes:
+- >-
+  Resolve identity before data. Indicator codeIDs come from get_indicator_categories, ITU CountryIDs
+  and ISO codes from list_countries, regionIDs from list_regions. The IDI and UMC country tools key
+  on the numeric ITU CountryID, NOT the ISO code — mixing them silently returns an empty array.
+- >-
+  An empty array is ambiguous. It means either "no data" or "no such identifier"; the API does not
+  distinguish. Always validate identifiers first.
+- >-
+  Prefer get_country_series over get_indicator_series. The unscoped series endpoint returns roughly
+  1.1 MB with no pagination available.
+- >-
+  There are no published rate limits and no rate-limit headers. Self-throttle and cache; the
+  reference data (countries, regions, topics, targets) changes rarely.
+- >-
+  Attribute results to ITU. This is UN reference statistics; cite the indicator label, the dataYear
+  and the dataSource field, which names the reporting national regulator or marks the value an
+  "ITU estimate.".

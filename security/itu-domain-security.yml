@@ -1,0 +1,26 @@
+generated: '2026-07-25'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.itu.int
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep  9 00:50:38 2026 GMT
+  hsts: false
+- host: datahub.itu.int
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb  8 23:59:59 2027 GMT
+  hsts: null
+- host: api.datahub.itu.int
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb 17 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: itu.int
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

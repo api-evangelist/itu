@@ -1,0 +1,730 @@
+openapi: 3.1.0
+info:
+  title: ITU DataHub API
+  version: '2'
+  summary: Undocumented public JSON API behind the ITU DataHub ICT statistics portal.
+  description: >-
+    ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for
+    this API. This document is an API Evangelist **observed-behaviour** description: every path,
+    parameter, status code and response shape below was recorded from live, anonymous HTTP calls
+    against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a
+    behaviour was not observed it is simply absent.
+
+
+    The route templates were recovered from the DataHub Next.js client bundle
+    (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL
+    `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists
+    and to capture its real response. Treat this surface as an internal backend that happens to be
+    public rather than as a supported product API: it can change without notice.
+
+
+    No authentication of any kind is required. No API key, no `Referer`, no `Origin`, no
+    `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs
+    on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).
+  contact:
+    name: ITU ICT Data & Analytics Division
+    email: indicators@itu.int
+    url: https://datahub.itu.int/
+  license:
+    name: ITU Terms of Use
+    url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+  x-apievangelist-provenance:
+    method: derived
+    derived_from: live anonymous HTTP probes + the public DataHub client bundle
+    probed: '2026-07-26'
+    provider_published_spec: false
+    note: >-
+      Derived by API Evangelist from observed responses. ITU has not published, reviewed, or
+      endorsed this description.
+externalDocs:
+  description: ITU DataHub portal (the only human surface for this API)
+  url: https://datahub.itu.int/
+servers:
+- url: https://api.datahub.itu.int/v2
+  description: Production (AWS API Gateway + CloudFront). Anonymous.
+tags:
+- name: Reference
+  description: Country and region reference data.
+- name: Indicators
+  description: The indicator dictionary — categories, definitions, units and coverage.
+- name: Data
+  description: Indicator time series, by indicator, country and region aggregate.
+- name: Dashboards
+  description: Curated DataHub dashboard definitions.
+- name: IDI
+  description: ICT Development Index composite scores.
+- name: UMC
+  description: Universal and Meaningful Connectivity targets and scores.
+- name: Methodology
+  description: Dataset provenance and the owning ITU divisions.
+paths:
+  /country/all:
+    get:
+      operationId: listCountries
+      tags: [Reference]
+      summary: List all countries
+      description: >-
+        Returns the full ITU country reference list — 200-plus economies with their ITU CountryID,
+        ISO 3166-1 alpha-3 code, short and long names, and every regional grouping the country
+        belongs to (ITU/BDT classification, UN M49, World Bank income group).
+      responses:
+        '200':
+          description: The full country list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Country' }
+              examples:
+                aruba:
+                  summary: First element of the live response
+                  value:
+                  - CountryID: 4
+                    IsoCode: ABW
+                    ShortName: Aruba
+                    LongName: Aruba
+                    Regions:
+                    - { id: 330, regionCode: DEV, class: UN M49 Developed-developing, classID: 92, region: Developing }
+                    - { id: 650, regionCode: OE, class: ITU/BDT & Other Classification, classID: 177, region: Other Economies }
+                    - { id: 701, regionCode: World, class: World, no regions, classID: 187, region: World }
+                    - { id: 2115, regionCode: HI2023, class: WB_Income2023, classID: 1310, region: High Income }
+  /region/all:
+    get:
+      operationId: listRegions
+      tags: [Reference]
+      summary: List all regions
+      description: >-
+        Returns every regional grouping used across DataHub — the ITU/BDT classification (Africa,
+        Americas, Arab States, Asia & Pacific, CIS, Europe), UN M49 groupings including LDC/LLDC/SIDS,
+        and World Bank income classes by year.
+      responses:
+        '200':
+          description: The region list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Region' }
+              examples:
+                arabStates:
+                  value:
+                  - { className: ITU/BDT Classification, regionCode: ARB, regionName: Arab States, regionID: 3 }
+  /dictionaries/getcategories:
+    get:
+      operationId: getIndicatorCategories
+      tags: [Indicators]
+      summary: Get the indicator dictionary
+      description: >-
+        Returns the complete DataHub indicator dictionary as a category / sub-category / item tree.
+        Each leaf item carries the `codeID` used by the data endpoints, its label, the owning
+        `databaseID`, and whether it is a collection indicator.
+      responses:
+        '200':
+          description: The indicator dictionary tree.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IndicatorCategory' }
+  /dictionaries/getbyid/{codeID}:
+    get:
+      operationId: getIndicatorById
+      tags: [Indicators]
+      summary: Get one indicator definition
+      description: >-
+        Returns the full metadata record for a single indicator — label, description, units,
+        answer type, start and end year, category placement, the list of countries with data
+        (`availableCountries`), sibling and disaggregation series, and the landing page.
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      responses:
+        '200':
+          description: The indicator definition.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IndicatorDefinition' }
+        '500':
+          $ref: '#/components/responses/UnknownIdentifier'
+  /data/bycode/{codeID}:
+    get:
+      operationId: getDataByCode
+      tags: [Data]
+      summary: Get an indicator time series for every country
+      description: >-
+        Returns the full observed time series for one indicator across every country — one record
+        per country-year, each with the value, the reporting source, and any data note. Responses
+        are large (the Internet-users series returns roughly 1.1 MB).
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      responses:
+        '200':
+          description: >-
+            The time series. An unknown `codeID` returns HTTP 200 with an empty array rather than a
+            404 — observed on `codeID=999999999`.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DataPoint' }
+              examples:
+                internetUsersAruba:
+                  summary: First element of the live response for codeID 11624
+                  value:
+                  - codeID: 11624
+                    shortName: Aruba
+                    dataID: 4790044
+                    dataNote: ''
+                    dataYear: 2000
+                    code: i99H
+                    dataSource: Servicio di Telecomunicacion di Aruba (SETAR).
+                    answer:
+                    - { value: '15.4428229480349', id: 4790044 }
+                    countryID: 4
+                    isoCode: ABW
+  /data/bycode/{codeID}/byiso/{iso}:
+    get:
+      operationId: getDataByCodeAndIso
+      tags: [Data]
+      summary: Get an indicator time series for one country
+      description: >-
+        Returns the observed time series for one indicator filtered to a single country by its
+        ISO 3166-1 alpha-3 code. The country-scoped form of `getDataByCode`, and the practical way
+        to use this API without downloading the whole series.
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      - $ref: '#/components/parameters/iso'
+      responses:
+        '200':
+          description: >-
+            The country time series. An unrecognised ISO code returns HTTP 200 with an empty array —
+            observed on `iso=ZZZ`.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DataPoint' }
+              examples:
+                internetUsersUSA:
+                  value:
+                  - codeID: 11624
+                    shortName: United States
+                    answer:
+                    - { value: '43.0791626375201', id: 4792974 }
+                    dataID: 4792974
+                    code: i99H
+                    isoCode: USA
+                    dataNote: ''
+                    dataYear: 2000
+                    countryID: 244
+                    dataSource: ITU estimate.
+  /aggregation/bycodeid/{codeID}/byregionid/{regionID}:
+    get:
+      operationId: getRegionalAggregate
+      tags: [Data]
+      summary: Get a regional aggregate series for an indicator
+      description: >-
+        Returns the ITU-computed regional aggregate for one indicator and one region — one record
+        per year with the aggregate value and, where applicable, the percentage form.
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      - $ref: '#/components/parameters/regionID'
+      responses:
+        '200':
+          description: The regional aggregate series.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AggregatePoint' }
+              examples:
+                arabStates2005:
+                  value:
+                  - { codeID: 11624, code: i99H, regionID: 647, regionName: Arab States, classID: 177,
+                      dataYear: 2005, dataID: 71287, databaseID: 1,
+                      answer: [{ value: 8.6 }], answersPercentage: [{ value: 8.6 }],
+                      createDate: '2024-04-24T18:20:23.000Z', updateDate: '2025-11-17T13:13:18.000Z',
+                      numberOfAnswer: null, internalNote: null }
+  /dashboard/all:
+    get:
+      operationId: listDashboards
+      tags: [Dashboards]
+      summary: List DataHub dashboards
+      description: >-
+        Returns every curated DataHub dashboard with its name, category, description, and the full
+        set of indicator codes it renders including each code's disaggregations, units, visibility
+        and coverage years.
+      responses:
+        '200':
+          description: The dashboard definitions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Dashboard' }
+  /idi/dashboard/all:
+    get:
+      operationId: getIdiStructure
+      tags: [IDI]
+      summary: Get the ICT Development Index structure
+      description: >-
+        Returns the IDI composite tree — the index, its Universal connectivity and Meaningful
+        connectivity pillars, and the underlying indicators each pillar scores.
+      responses:
+        '200':
+          description: The IDI structure.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IdiNode' }
+  /idi/dashboard/version:
+    get:
+      operationId: listIdiVersions
+      tags: [IDI]
+      summary: List available IDI editions
+      description: Returns the list of IDI edition years available in DataHub.
+      responses:
+        '200':
+          description: The edition years.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: integer }
+              examples:
+                editions:
+                  value: [2023, 2024, 2025, 2026]
+  /idi/data/bycountryid/{countryID}:
+    get:
+      operationId: getIdiByCountry
+      tags: [IDI]
+      summary: Get IDI scores for one country
+      description: >-
+        Returns the IDI pillar and indicator scores for a single country, keyed by the ITU
+        `CountryID` from `listCountries` (not the ISO code).
+      parameters:
+      - $ref: '#/components/parameters/countryID'
+      responses:
+        '200':
+          description: >-
+            The country's IDI scores. Returns HTTP 200 with an empty array where no scores exist
+            for the supplied identifier.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IdiScore' }
+  /idi/region/byregionid/{regionID}:
+    get:
+      operationId: getIdiByRegion
+      tags: [IDI]
+      summary: Get IDI scores for one region
+      description: Returns the IDI pillar and indicator scores aggregated for a single region.
+      parameters:
+      - $ref: '#/components/parameters/regionID'
+      responses:
+        '200':
+          description: The region's IDI scores.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IdiScore' }
+              examples:
+                arabStates:
+                  value:
+                  - { regionID: 3, dataID: 2026003005, codeID: 5, score: 56.355555555555554, dataYear: 2026 }
+  /umc/dashboard/all:
+    get:
+      operationId: getUmcDashboard
+      tags: [UMC]
+      summary: Get the Universal and Meaningful Connectivity dashboard
+      description: >-
+        Returns every UMC indicator with its target definition — the target name, description,
+        minimum and maximum target values, units, source, and the topic and macro it rolls into.
+      responses:
+        '200':
+          description: The UMC indicator and target definitions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/UmcIndicator' }
+  /umc/topic/all:
+    get:
+      operationId: listUmcTopics
+      tags: [UMC]
+      summary: List UMC topics
+      description: Returns the six UMC topics — People, Homes, Businesses, Affordability, Schools, Infrastructure.
+      responses:
+        '200':
+          description: The topic list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/UmcTopic' }
+              examples:
+                topics:
+                  value:
+                  - { topicID: 1, label: People }
+                  - { topicID: 2, label: Homes }
+                  - { topicID: 3, label: Businesses }
+                  - { topicID: 4, label: Affordability }
+                  - { topicID: 5, label: Schools }
+                  - { topicID: 6, label: Infrastructure }
+  /umc/macro/all:
+    get:
+      operationId: listUmcMacros
+      tags: [UMC]
+      summary: List UMC macro categories
+      description: Returns the two UMC macro categories — Universal connectivity and Meaningful connectivity.
+      responses:
+        '200':
+          description: The macro list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/UmcMacro' }
+              examples:
+                macros:
+                  value:
+                  - { macroID: 1, label: Universal connectivity }
+                  - { macroID: 2, label: Meaningful connectivity }
+  /umc/target/all:
+    get:
+      operationId: listUmcTargets
+      tags: [UMC]
+      summary: List UMC target bands
+      description: >-
+        Returns the UMC scoring bands used to colour the dashboard — No data, Limited, Satisfactory,
+        Advanced, Target met — with the numeric range each band covers.
+      responses:
+        '200':
+          description: The target bands.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/UmcTarget' }
+              examples:
+                bands:
+                  value:
+                  - { targetID: 0, min: -1, max: -1, label: No data }
+                  - { targetID: 1, min: 0, max: 50, label: Limited }
+                  - { targetID: 2, min: 50, max: 75, label: Satisfactory }
+                  - { targetID: 3, min: 75, max: 95, label: Advanced }
+                  - { targetID: 4, min: 95, max: 100, label: Target met }
+  /umc/bycountryid/{countryID}:
+    get:
+      operationId: getUmcByCountry
+      tags: [UMC]
+      summary: Get UMC scores for one country
+      description: >-
+        Returns every UMC indicator scored for a single country, keyed by the ITU `CountryID`, with
+        the observed value alongside the target definition it is measured against.
+      parameters:
+      - $ref: '#/components/parameters/countryID'
+      responses:
+        '200':
+          description: The country's UMC scores.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/UmcCountryScore' }
+  /methodology/dataset:
+    get:
+      operationId: listDatasets
+      tags: [Methodology]
+      summary: List the source datasets behind DataHub
+      description: >-
+        Returns the ITU datasets that feed DataHub — short name, type (quantitative or qualitative),
+        the owning ITU division and its contact email, whether the dataset is publicly visible, and
+        whether it has frozen public data.
+      responses:
+        '200':
+          description: The dataset inventory.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Dataset' }
+              examples:
+                wti:
+                  value:
+                  - { datasetID: 1, datasetShortName: WTI, datasetType: Quantitative,
+                      teamShortName: IDA, teamName: ICT DATA & ANALYTICS DIVISION,
+                      email: indicators@itu.int, publiclyVisible: true, hasFrozenPublicData: true }
+components:
+  parameters:
+    codeID:
+      name: codeID
+      in: path
+      required: true
+      description: The DataHub indicator identifier, from `getIndicatorCategories`.
+      schema: { type: integer }
+      example: 11624
+    iso:
+      name: iso
+      in: path
+      required: true
+      description: ISO 3166-1 alpha-3 country code, from `listCountries`.
+      schema: { type: string, minLength: 3, maxLength: 3 }
+      example: USA
+    countryID:
+      name: countryID
+      in: path
+      required: true
+      description: The ITU numeric country identifier, from `listCountries`.
+      schema: { type: integer }
+      example: 244
+    regionID:
+      name: regionID
+      in: path
+      required: true
+      description: The region identifier, from `listRegions`.
+      schema: { type: integer }
+      example: 3
+  responses:
+    UnknownIdentifier:
+      description: >-
+        Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON
+        and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting
+        'availableCountries')`.
+      content:
+        text/plain:
+          schema: { type: string }
+    MissingRoute:
+      description: >-
+        AWS API Gateway returns this for any path that is not a configured route, including the
+        `/v2` base path itself. It is not an authentication requirement — every configured route
+        answers anonymously.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string, const: Missing Authentication Token }
+  schemas:
+    Country:
+      type: object
+      description: A country or economy in the ITU reference list.
+      properties:
+        CountryID: { type: integer, description: ITU numeric country identifier. }
+        IsoCode: { type: string, description: ISO 3166-1 alpha-3 code. }
+        ShortName: { type: string }
+        LongName: { type: string }
+        Regions:
+          type: array
+          items: { $ref: '#/components/schemas/CountryRegion' }
+    CountryRegion:
+      type: object
+      description: A regional grouping membership for a country.
+      properties:
+        id: { type: integer }
+        regionCode: { type: string }
+        class: { type: string, description: The classification family, e.g. "ITU/BDT & Other Classification". }
+        classID: { type: integer }
+        region: { type: string }
+    Region:
+      type: object
+      properties:
+        className: { type: string }
+        regionCode: { type: string }
+        regionName: { type: string }
+        regionID: { type: integer }
+    IndicatorCategory:
+      type: object
+      properties:
+        category: { type: string }
+        categorySort: { type: integer }
+        subCategory:
+          type: array
+          items: { $ref: '#/components/schemas/IndicatorSubCategory' }
+    IndicatorSubCategory:
+      type: object
+      properties:
+        subCategory: { type: string }
+        subCategorySort: { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/IndicatorItem' }
+    IndicatorItem:
+      type: object
+      properties:
+        codeID: { type: integer }
+        label: { type: string }
+        databaseID: { type: integer }
+        seriesType: { type: string }
+        indicatorSort: { type: integer }
+        external: { type: boolean }
+        isCollection: { type: boolean }
+    IndicatorDefinition:
+      type: object
+      description: The full metadata record for one indicator.
+      properties:
+        codeID: { type: integer }
+        code: { type: string, description: The ITU short indicator code, e.g. "i99H". }
+        label: { type: string }
+        codeDesc: { type: string }
+        units: { type: string }
+        unitsType: { type: string }
+        alternativeUnits: {}
+        answerType: { type: string }
+        startYear: { type: integer }
+        endYear: { type: integer }
+        category: { type: string }
+        categorySort: { type: integer }
+        indicatorCategory: { type: string }
+        indicatorCategorySort: { type: integer }
+        subCategory: { type: string }
+        subCategorySort: { type: integer }
+        databaseID: { type: integer }
+        codeVisibility: { type: string, description: e.g. "Public/Free". }
+        seriesType: { type: string }
+        archive: { type: boolean }
+        external: { type: boolean }
+        indicatorSort: { type: integer }
+        disaggregation: { type: array, items: { type: object } }
+        disaggregationSort: { type: integer }
+        sibling: { type: array, items: { type: object } }
+        availableCountries: { type: array, items: { type: object } }
+        landingPage: { type: string }
+        Question: { type: string }
+        Comment: { type: string }
+    DataPoint:
+      type: object
+      description: One country-year observation of an indicator.
+      properties:
+        dataID: { type: integer }
+        codeID: { type: integer }
+        code: { type: string }
+        countryID: { type: integer }
+        isoCode: { type: string }
+        shortName: { type: string }
+        dataYear: { type: integer }
+        dataSource: { type: string, description: The reporting source, e.g. a national regulator or "ITU estimate.". }
+        dataNote: { type: string }
+        answer:
+          type: array
+          description: The observed value. Values are returned as strings on this endpoint.
+          items:
+            type: object
+            properties:
+              value: { type: string }
+              id: { type: integer }
+    AggregatePoint:
+      type: object
+      description: One region-year aggregate of an indicator, computed by ITU.
+      properties:
+        dataID: { type: integer }
+        codeID: { type: integer }
+        code: { type: string }
+        regionID: { type: integer }
+        regionName: { type: string }
+        classID: { type: integer }
+        databaseID: { type: integer }
+        dataYear: { type: integer }
+        answer: { type: array, items: { type: object, properties: { value: { type: number } } } }
+        answersPercentage: { type: array, items: { type: object, properties: { value: { type: number } } } }
+        numberOfAnswer: { type: [integer, 'null'] }
+        internalNote: { type: [string, 'null'] }
+        createDate: { type: string, format: date-time }
+        updateDate: { type: string, format: date-time }
+    Dashboard:
+      type: object
+      properties:
+        dashboardID: { type: integer }
+        dashboardName: { type: string }
+        dashboardCategory: { type: string }
+        dashboardDesc: { type: string }
+        archive: { type: boolean }
+        dashboardCodes: { type: array, items: { type: object } }
+    IdiNode:
+      type: object
+      description: A node in the ICT Development Index composite tree.
+      properties:
+        codeID: { type: integer }
+        code: { type: string }
+        label: { type: string }
+        codeDesc: { type: string }
+        children: { type: array, items: { $ref: '#/components/schemas/IdiNode' } }
+    IdiScore:
+      type: object
+      properties:
+        dataID: { type: integer }
+        codeID: { type: integer }
+        regionID: { type: integer }
+        score: { type: number }
+        dataYear: { type: integer }
+    UmcIndicator:
+      type: object
+      properties:
+        codeID: { type: integer }
+        code: { type: string }
+        label: { type: string }
+        indicatorLabel: { type: string }
+        codeDesc: { type: string }
+        units: { type: string }
+        source: { type: string }
+        archive: { type: boolean }
+        topicID: { type: integer }
+        macroID: { type: integer }
+        targetName: { type: string }
+        targetDesc: { type: string }
+        targetMinValue: { type: number }
+        targetMaxValue: { type: number }
+        createDate: { type: integer, description: Epoch milliseconds. }
+        updateDate: { type: integer, description: Epoch milliseconds. }
+    UmcCountryScore:
+      type: object
+      properties:
+        codeID: { type: integer }
+        code: { type: string }
+        label: { type: string }
+        units: { type: string }
+        source: { type: string }
+        archive: { type: boolean }
+        topicID: { type: integer }
+        topicTarget: { type: string }
+        macroID: { type: integer }
+        macroTarget: { type: string }
+        targetName: { type: string }
+        targetDesc: { type: string }
+        targetMinValue: { type: number }
+        targetMaxValue: { type: number }
+        rawMinValue: { type: number }
+        rawMaxValue: { type: number }
+        answer: { type: array, items: { type: object } }
+    UmcTopic:
+      type: object
+      properties:
+        topicID: { type: integer }
+        label: { type: string }
+    UmcMacro:
+      type: object
+      properties:
+        macroID: { type: integer }
+        label: { type: string }
+    UmcTarget:
+      type: object
+      properties:
+        targetID: { type: integer }
+        min: { type: number }
+        max: { type: number }
+        label: { type: string }
+    Dataset:
+      type: object
+      properties:
+        datasetID: { type: integer }
+        datasetShortName: { type: string }
+        datasetType: { type: string, enum: [Quantitative, Qualitative] }
+        teamShortName: { type: string }
+        teamName: { type: string }
+        email: { type: string, format: email }
+        publiclyVisible: { type: boolean }
+        hasFrozenPublicData: { type: boolean }

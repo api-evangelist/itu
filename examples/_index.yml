@@ -1,0 +1,26 @@
+generated: '2026-07-26'
+method: searched
+source: live anonymous responses from https://api.datahub.itu.int/v2, captured 2026-07-26
+note: >-
+  Real captured responses, not synthesised payloads. ITU publishes no examples anywhere, so each of
+  these was produced by calling the live API and saving what came back. Large responses are
+  truncated to the first N array elements — the element shape is verbatim, only the list length is
+  reduced. Truncation is recorded per file below.
+examples:
+- { file: itu-list-countries.json, operation: listCountries, truncated_to: 3, full_response_bytes: 134506 }
+- { file: itu-list-regions.json, operation: listRegions, truncated_to: null, full_response_bytes: 1408 }
+- { file: itu-get-indicator-categories.json, operation: getIndicatorCategories, truncated_to: 1, full_response_bytes: 36110 }
+- { file: itu-get-indicator.json, operation: getIndicatorById, truncated_to: 1, full_response_bytes: 6684, request: 'codeID=11624 (Individuals using the Internet)' }
+- { file: itu-get-indicator-series.json, operation: getDataByCode, truncated_to: 3, full_response_bytes: 1166013, request: 'codeID=11624' }
+- { file: itu-get-country-series.json, operation: getDataByCodeAndIso, truncated_to: 5, full_response_bytes: 5755, request: 'codeID=11624, iso=USA' }
+- { file: itu-get-regional-aggregate.json, operation: getRegionalAggregate, truncated_to: 3, full_response_bytes: 6701, request: 'codeID=11624, regionID=3 (Arab States)' }
+- { file: itu-list-dashboards.json, operation: listDashboards, truncated_to: 1, full_response_bytes: 7844 }
+- { file: itu-get-idi-structure.json, operation: getIdiStructure, truncated_to: null, full_response_bytes: 1812 }
+- { file: itu-list-idi-versions.json, operation: listIdiVersions, truncated_to: null, full_response_bytes: 21 }
+- { file: itu-get-idi-by-region.json, operation: getIdiByRegion, truncated_to: 5, full_response_bytes: 1036, request: 'regionID=3 (Arab States)' }
+- { file: itu-get-umc-dashboard.json, operation: getUmcDashboard, truncated_to: 2, full_response_bytes: 9799 }
+- { file: itu-list-umc-topics.json, operation: listUmcTopics, truncated_to: null, full_response_bytes: 206 }
+- { file: itu-list-umc-macros.json, operation: listUmcMacros, truncated_to: null, full_response_bytes: 96 }
+- { file: itu-list-umc-targets.json, operation: listUmcTargets, truncated_to: null, full_response_bytes: 265 }
+- { file: itu-get-umc-by-country.json, operation: getUmcByCountry, truncated_to: 2, full_response_bytes: 7086, request: 'countryID=840' }
+- { file: itu-list-datasets.json, operation: listDatasets, truncated_to: null, full_response_bytes: 888 }

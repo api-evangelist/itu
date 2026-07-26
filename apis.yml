@@ -30,7 +30,7 @@ tags:
 - Open Data
 - United Nations
 created: '2026-07-25'
-modified: '2026-07-25'
+modified: '2026-07-26'
 specificationVersion: '0.19'
 apis:
 - aid: itu:itu-datahub-api
@@ -54,6 +54,10 @@ apis:
   - Connectivity
   - Regulator
   properties:
+  - type: OpenAPI
+    url: openapi/itu-datahub-openapi.yml
+  - type: Overlay
+    url: overlays/itu-datahub-overlay.yaml
   - type: Documentation
     url: https://datahub.itu.int/
   - type: APIReference
@@ -80,6 +84,10 @@ apis:
   - Connectivity
   - Open Data
   properties:
+  - type: OpenAPI
+    url: openapi/itu-proximity-openapi.yml
+  - type: Overlay
+    url: overlays/itu-proximity-overlay.yaml
   - type: Documentation
     url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
   - type: APIReference
@@ -87,6 +95,34 @@ apis:
   - type: Documentation
     url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
 common:
+- type: AgenticAccess
+  url: agentic-access/itu-agentic-access.yml
+- type: Authentication
+  url: authentication/itu-authentication.yml
+- type: DomainSecurity
+  url: security/itu-domain-security.yml
+- type: Conventions
+  url: conventions/itu-conventions.yml
+- type: ErrorCatalog
+  url: errors/itu-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/itu-lifecycle.yml
+- type: Conformance
+  url: conformance/itu-conformance.yml
+- type: DataModel
+  url: data-model/itu-data-model.yml
+- type: Examples
+  url: examples/_index.yml
+- type: MCPServer
+  url: mcp/itu-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/itu-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/itu-llms.txt
+- type: LLMsTxt
+  url: https://bbmaps.itu.int/llms.txt
 - type: Website
   url: https://www.itu.int/
 - type: Documentation
@@ -97,6 +133,12 @@ common:
   url: https://www.linkedin.com/company/itu
 - type: Blog
   url: https://www.itu.int/hub/
+- type: Support
+  url: https://www.itu.int/home/contact/index.html
+- type: TermsOfService
+  url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+- type: PrivacyPolicy
+  url: https://www.itu.int/en/about/Pages/privacy-notice.aspx
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

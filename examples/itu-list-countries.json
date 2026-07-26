@@ -1,0 +1,124 @@
+[
+  {
+    "CountryID": 4,
+    "IsoCode": "ABW",
+    "ShortName": "Aruba",
+    "LongName": "Aruba",
+    "Regions": [
+      {
+        "id": 330,
+        "regionCode": "DEV",
+        "class": "UN M49 Developed-developing",
+        "classID": 92,
+        "region": "Developing"
+      },
+      {
+        "id": 650,
+        "regionCode": "OE",
+        "class": "ITU/BDT & Other Classification",
+        "classID": 177,
+        "region": "Other Economies"
+      },
+      {
+        "id": 701,
+        "regionCode": "World",
+        "class": "World, no regions",
+        "classID": 187,
+        "region": "World"
+      },
+      {
+        "id": 2115,
+        "regionCode": "HI2023",
+        "class": "WB_Income2023",
+        "classID": 1310,
+        "region": "High Income"
+      }
+    ]
+  },
+  {
+    "CountryID": 6,
+    "IsoCode": "AFG",
+    "ShortName": "Afghanistan",
+    "LongName": "Afghanistan",
+    "Regions": [
+      {
+        "id": 4,
+        "regionCode": "ASP",
+        "class": "ITU/BDT Classification",
+        "classID": 1,
+        "region": "Asia & Pacific"
+      },
+      {
+        "id": 330,
+        "regionCode": "DEV",
+        "class": "UN M49 Developed-developing",
+        "classID": 92,
+        "region": "Developing"
+      },
+      {
+        "id": 648,
+        "regionCode": "ASP",
+        "class": "ITU/BDT & Other Classification",
+        "classID": 177,
+        "region": "Asia & Pacific"
+      },
+      {
+        "id": 701,
+        "regionCode": "World",
+        "class": "World, no regions",
+        "classID": 187,
+        "region": "World"
+      },
+      {
+        "id": 2116,
+        "regionCode": "LI2023",
+        "class": "WB_Income2023",
+        "classID": 1310,
+        "region": "Low Income"
+      }
+    ]
+  },
+  {
+    "CountryID": 7,
+    "IsoCode": "ZAF",
+    "ShortName": "South Africa",
+    "LongName": "South Africa (Republic of)",
+    "Regions": [
+      {
+        "id": 1,
+        "regionCode": "AFR",
+        "class": "ITU/BDT Classification",
+        "classID": 1,
+        "region": "Africa"
+      },
+      {
+        "id": 330,
+        "regionCode": "DEV",
+        "class": "UN M49 Developed-developing",
+        "classID": 92,
+        "region": "Developing"
+      },
+      {
+        "id": 645,
+        "regionCode": "AFR",
+        "class": "ITU/BDT & Other Classification",
+        "classID": 177,
+        "region": "Africa"
+      },
+      {
+        "id": 701,
+        "regionCode": "World",
+        "class": "World, no regions",
+        "classID": 187,
+        "region": "World"
+      },
+      {
+        "id": 2118,
+        "regionCode": "UMI",
+        "class": "WB_Income2023",
+        "classID": 1310,
+        "region": "Upper Middle Income"
+      }
+    ]
+  }
+]
