@@ -1,0 +1,1617 @@
+{
+  "item": [
+    {
+      "id": "e30aeefe-85c4-4b3b-8699-e4caa4bba90b",
+      "name": "Reference",
+      "description": {
+        "content": "Country and region reference data.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bbfe141d-8488-4955-92b3-a0e4dcedfe6c",
+          "name": "List all countries",
+          "request": {
+            "name": "List all countries",
+            "description": {
+              "content": "Returns the full ITU country reference list — 200-plus economies with their ITU CountryID, ISO 3166-1 alpha-3 code, short and long names, and every regional grouping the country belongs to (ITU/BDT classification, UN M49, World Bank income group).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "country",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b6c8688f-39d4-472c-a6b4-2d4e0d5ac0f4",
+              "name": "The full country list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "country",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"CountryID\": 4,\n    \"IsoCode\": \"ABW\",\n    \"ShortName\": \"Aruba\",\n    \"LongName\": \"Aruba\",\n    \"Regions\": [\n      {\n        \"id\": 330,\n        \"regionCode\": \"DEV\",\n        \"class\": \"UN M49 Developed-developing\",\n        \"classID\": 92,\n        \"region\": \"Developing\"\n      },\n      {\n        \"id\": 650,\n        \"regionCode\": \"OE\",\n        \"class\": \"ITU/BDT & Other Classification\",\n        \"classID\": 177,\n        \"region\": \"Other Economies\"\n      },\n      {\n        \"id\": 701,\n        \"regionCode\": \"World\",\n        \"class\": \"World\",\n        \"no regions\": null,\n        \"classID\": 187,\n        \"region\": \"World\"\n      },\n      {\n        \"id\": 2115,\n        \"regionCode\": \"HI2023\",\n        \"class\": \"WB_Income2023\",\n        \"classID\": 1310,\n        \"region\": \"High Income\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ee1dd2c-5ea8-4dc5-bca9-4f2e3261c419",
+          "name": "List all regions",
+          "request": {
+            "name": "List all regions",
+            "description": {
+              "content": "Returns every regional grouping used across DataHub — the ITU/BDT classification (Africa, Americas, Arab States, Asia & Pacific, CIS, Europe), UN M49 groupings including LDC/LLDC/SIDS, and World Bank income classes by year.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "region",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "35772424-1367-4f97-9b45-7c5ad4d1e7c1",
+              "name": "The region list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "region",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"className\": \"ITU/BDT Classification\",\n    \"regionCode\": \"ARB\",\n    \"regionName\": \"Arab States\",\n    \"regionID\": 3\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5979f47a-bca4-4def-85bf-da9a1a0a47f8",
+      "name": "Indicators",
+      "description": {
+        "content": "The indicator dictionary — categories, definitions, units and coverage.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3d8070a1-eea2-4b2f-9606-f15d60a22db4",
+          "name": "Get the indicator dictionary",
+          "request": {
+            "name": "Get the indicator dictionary",
+            "description": {
+              "content": "Returns the complete DataHub indicator dictionary as a category / sub-category / item tree. Each leaf item carries the `codeID` used by the data endpoints, its label, the owning `databaseID`, and whether it is a collection indicator.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dictionaries",
+                "getcategories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ad92083b-cf8b-4793-912d-f3ded5f9fbf4",
+              "name": "The indicator dictionary tree.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dictionaries",
+                    "getcategories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"category\": \"string\",\n    \"categorySort\": 8694,\n    \"subCategory\": [\n      {\n        \"subCategory\": \"string\",\n        \"subCategorySort\": 9530,\n        \"items\": [\n          {\n            \"codeID\": 5514,\n            \"label\": \"string\",\n            \"databaseID\": 9390,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 7916,\n            \"external\": true,\n            \"isCollection\": false\n          },\n          {\n            \"codeID\": 7845,\n            \"label\": \"string\",\n            \"databaseID\": 4281,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 9549,\n            \"external\": false,\n            \"isCollection\": true\n          }\n        ]\n      },\n      {\n        \"subCategory\": \"string\",\n        \"subCategorySort\": 6253,\n        \"items\": [\n          {\n            \"codeID\": 9594,\n            \"label\": \"string\",\n            \"databaseID\": 7809,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 6845,\n            \"external\": true,\n            \"isCollection\": false\n          },\n          {\n            \"codeID\": 3385,\n            \"label\": \"string\",\n            \"databaseID\": 1629,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 3230,\n            \"external\": true,\n            \"isCollection\": false\n          }\n        ]\n      }\n    ]\n  },\n  {\n    \"category\": \"string\",\n    \"categorySort\": 5162,\n    \"subCategory\": [\n      {\n        \"subCategory\": \"string\",\n        \"subCategorySort\": 219,\n        \"items\": [\n          {\n            \"codeID\": 3093,\n            \"label\": \"string\",\n            \"databaseID\": 5290,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 6154,\n            \"external\": true,\n            \"isCollection\": false\n          },\n          {\n            \"codeID\": 7427,\n            \"label\": \"string\",\n            \"databaseID\": 5004,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 3007,\n            \"external\": false,\n            \"isCollection\": true\n          }\n        ]\n      },\n      {\n        \"subCategory\": \"string\",\n        \"subCategorySort\": 4442,\n        \"items\": [\n          {\n            \"codeID\": 3275,\n            \"label\": \"string\",\n            \"databaseID\": 6522,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 2299,\n            \"external\": false,\n            \"isCollection\": true\n          },\n          {\n            \"codeID\": 5976,\n            \"label\": \"string\",\n            \"databaseID\": 8885,\n            \"seriesType\": \"string\",\n            \"indicatorSort\": 1029,\n            \"external\": false,\n            \"isCollection\": false\n          }\n        ]\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a4b28f9-e279-4cf3-b397-098528e98198",
+          "name": "Get one indicator definition",
+          "request": {
+            "name": "Get one indicator definition",
+            "description": {
+              "content": "Returns the full metadata record for a single indicator — label, description, units, answer type, start and end year, category placement, the list of countries with data (`availableCountries`), sibling and disaggregation series, and the landing page.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dictionaries",
+                "getbyid",
+                ":codeID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "codeID",
+                  "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3fc8eaff-9cf3-444e-a34d-fe2e895e0dc7",
+              "name": "The indicator definition.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dictionaries",
+                    "getbyid",
+                    ":codeID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "codeID",
+                      "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 4150,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"codeDesc\": \"string\",\n    \"units\": \"string\",\n    \"unitsType\": \"string\",\n    \"alternativeUnits\": \"\",\n    \"answerType\": \"string\",\n    \"startYear\": 4884,\n    \"endYear\": 8002,\n    \"category\": \"string\",\n    \"categorySort\": 9053,\n    \"indicatorCategory\": \"string\",\n    \"indicatorCategorySort\": 9904,\n    \"subCategory\": \"string\",\n    \"subCategorySort\": 4245,\n    \"databaseID\": 3047,\n    \"codeVisibility\": \"string\",\n    \"seriesType\": \"string\",\n    \"archive\": false,\n    \"external\": true,\n    \"indicatorSort\": 3000,\n    \"disaggregationSort\": 4147,\n    \"landingPage\": \"string\",\n    \"Question\": \"string\",\n    \"Comment\": \"string\"\n  },\n  {\n    \"codeID\": 5035,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"codeDesc\": \"string\",\n    \"units\": \"string\",\n    \"unitsType\": \"string\",\n    \"alternativeUnits\": \"\",\n    \"answerType\": \"string\",\n    \"startYear\": 4233,\n    \"endYear\": 9785,\n    \"category\": \"string\",\n    \"categorySort\": 2459,\n    \"indicatorCategory\": \"string\",\n    \"indicatorCategorySort\": 2824,\n    \"subCategory\": \"string\",\n    \"subCategorySort\": 7768,\n    \"databaseID\": 793,\n    \"codeVisibility\": \"string\",\n    \"seriesType\": \"string\",\n    \"archive\": false,\n    \"external\": false,\n    \"indicatorSort\": 623,\n    \"disaggregationSort\": 8138,\n    \"landingPage\": \"string\",\n    \"Question\": \"string\",\n    \"Comment\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96806312-e511-4a7d-972d-65fe40a1fd01",
+              "name": "Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting 'availableCountries')`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dictionaries",
+                    "getbyid",
+                    ":codeID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "codeID",
+                      "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "de7bfc7a-d4ce-4c64-86f9-b5c81db801e8",
+      "name": "Data",
+      "description": {
+        "content": "Indicator time series, by indicator, country and region aggregate.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1474cfb8-6463-4527-a483-d74ac0b1ca99",
+          "name": "Get an indicator time series for every country",
+          "request": {
+            "name": "Get an indicator time series for every country",
+            "description": {
+              "content": "Returns the full observed time series for one indicator across every country — one record per country-year, each with the value, the reporting source, and any data note. Responses are large (the Internet-users series returns roughly 1.1 MB).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "data",
+                "bycode",
+                ":codeID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "codeID",
+                  "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "56841ba0-2b83-48ff-8c1d-b6707c623802",
+              "name": "The time series. An unknown `codeID` returns HTTP 200 with an empty array rather than a 404 — observed on `codeID=999999999`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "bycode",
+                    ":codeID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "codeID",
+                      "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 11624,\n    \"shortName\": \"Aruba\",\n    \"dataID\": 4790044,\n    \"dataNote\": \"\",\n    \"dataYear\": 2000,\n    \"code\": \"i99H\",\n    \"dataSource\": \"Servicio di Telecomunicacion di Aruba (SETAR).\",\n    \"answer\": [\n      {\n        \"value\": \"15.4428229480349\",\n        \"id\": 4790044\n      }\n    ],\n    \"countryID\": 4,\n    \"isoCode\": \"ABW\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a78179f-7456-4990-bba5-bea6b58ceaca",
+          "name": "Get an indicator time series for one country",
+          "request": {
+            "name": "Get an indicator time series for one country",
+            "description": {
+              "content": "Returns the observed time series for one indicator filtered to a single country by its ISO 3166-1 alpha-3 code. The country-scoped form of `getDataByCode`, and the practical way to use this API without downloading the whole series.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "data",
+                "bycode",
+                ":codeID",
+                "byiso",
+                ":iso"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "codeID",
+                  "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "iso",
+                  "description": "(Required) ISO 3166-1 alpha-3 country code, from `listCountries`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e78e8abc-c187-499c-9a60-f03ea6628c57",
+              "name": "The country time series. An unrecognised ISO code returns HTTP 200 with an empty array — observed on `iso=ZZZ`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "bycode",
+                    ":codeID",
+                    "byiso",
+                    ":iso"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "codeID",
+                      "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "iso",
+                      "description": "(Required) ISO 3166-1 alpha-3 country code, from `listCountries`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 11624,\n    \"shortName\": \"United States\",\n    \"answer\": [\n      {\n        \"value\": \"43.0791626375201\",\n        \"id\": 4792974\n      }\n    ],\n    \"dataID\": 4792974,\n    \"code\": \"i99H\",\n    \"isoCode\": \"USA\",\n    \"dataNote\": \"\",\n    \"dataYear\": 2000,\n    \"countryID\": 244,\n    \"dataSource\": \"ITU estimate.\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6823a506-cf30-4224-baa1-af88443711c8",
+          "name": "Get a regional aggregate series for an indicator",
+          "request": {
+            "name": "Get a regional aggregate series for an indicator",
+            "description": {
+              "content": "Returns the ITU-computed regional aggregate for one indicator and one region — one record per year with the aggregate value and, where applicable, the percentage form.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "aggregation",
+                "bycodeid",
+                ":codeID",
+                "byregionid",
+                ":regionID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "codeID",
+                  "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "regionID",
+                  "description": "(Required) The region identifier, from `listRegions`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ffa0f193-f590-48dd-8564-a4835b194a5a",
+              "name": "The regional aggregate series.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregation",
+                    "bycodeid",
+                    ":codeID",
+                    "byregionid",
+                    ":regionID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "codeID",
+                      "description": "(Required) The DataHub indicator identifier, from `getIndicatorCategories`."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "regionID",
+                      "description": "(Required) The region identifier, from `listRegions`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 11624,\n    \"code\": \"i99H\",\n    \"regionID\": 647,\n    \"regionName\": \"Arab States\",\n    \"classID\": 177,\n    \"dataYear\": 2005,\n    \"dataID\": 71287,\n    \"databaseID\": 1,\n    \"answer\": [\n      {\n        \"value\": 8.6\n      }\n    ],\n    \"answersPercentage\": [\n      {\n        \"value\": 8.6\n      }\n    ],\n    \"createDate\": \"2024-04-24T18:20:23.000Z\",\n    \"updateDate\": \"2025-11-17T13:13:18.000Z\",\n    \"numberOfAnswer\": null,\n    \"internalNote\": null\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "9eb5798e-77de-47ef-8f78-0fd79274e491",
+      "name": "Dashboards",
+      "description": {
+        "content": "Curated DataHub dashboard definitions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "66f7be1a-97cc-4391-a90d-1d5cfc0569d0",
+          "name": "List DataHub dashboards",
+          "request": {
+            "name": "List DataHub dashboards",
+            "description": {
+              "content": "Returns every curated DataHub dashboard with its name, category, description, and the full set of indicator codes it renders including each code's disaggregations, units, visibility and coverage years.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dashboard",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "11885f02-357e-4063-8c50-22e474403910",
+              "name": "The dashboard definitions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dashboard",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"dashboardID\": 8502,\n    \"dashboardName\": \"string\",\n    \"dashboardCategory\": \"string\",\n    \"dashboardDesc\": \"string\",\n    \"archive\": false\n  },\n  {\n    \"dashboardID\": 212,\n    \"dashboardName\": \"string\",\n    \"dashboardCategory\": \"string\",\n    \"dashboardDesc\": \"string\",\n    \"archive\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4cbeb8ef-6042-4c09-96bd-48b6b5b44e28",
+      "name": "IDI",
+      "description": {
+        "content": "ICT Development Index composite scores.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e38de4bf-8cdb-473e-8b18-8448ca045b6d",
+          "name": "Get the ICT Development Index structure",
+          "request": {
+            "name": "Get the ICT Development Index structure",
+            "description": {
+              "content": "Returns the IDI composite tree — the index, its Universal connectivity and Meaningful connectivity pillars, and the underlying indicators each pillar scores.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "idi",
+                "dashboard",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6e8fe40b-d415-4dc5-ab8a-d3b4e3558253",
+              "name": "The IDI structure.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "idi",
+                    "dashboard",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 1366,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"codeDesc\": \"string\",\n    \"children\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/IdiNode detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/IdiNode detected>\"\n      }\n    ]\n  },\n  {\n    \"codeID\": 7742,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"codeDesc\": \"string\",\n    \"children\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/IdiNode detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/IdiNode detected>\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cfbb58f9-b814-405b-97ed-eefc29985428",
+          "name": "List available IDI editions",
+          "request": {
+            "name": "List available IDI editions",
+            "description": {
+              "content": "Returns the list of IDI edition years available in DataHub.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "idi",
+                "dashboard",
+                "version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4da72282-f55e-478b-a73a-e3131b5a593a",
+              "name": "The edition years.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "idi",
+                    "dashboard",
+                    "version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  2023,\n  2024,\n  2025,\n  2026\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ee029dcf-7e4a-442c-9ad6-b6640e7dc679",
+          "name": "Get IDI scores for one country",
+          "request": {
+            "name": "Get IDI scores for one country",
+            "description": {
+              "content": "Returns the IDI pillar and indicator scores for a single country, keyed by the ITU `CountryID` from `listCountries` (not the ISO code).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "idi",
+                "data",
+                "bycountryid",
+                ":countryID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "countryID",
+                  "description": "(Required) The ITU numeric country identifier, from `listCountries`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "03137813-0d5c-436a-beac-800234cfea17",
+              "name": "The country's IDI scores. Returns HTTP 200 with an empty array where no scores exist for the supplied identifier.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "idi",
+                    "data",
+                    "bycountryid",
+                    ":countryID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "countryID",
+                      "description": "(Required) The ITU numeric country identifier, from `listCountries`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"dataID\": 3635,\n    \"codeID\": 6090,\n    \"regionID\": 3557,\n    \"score\": 8425.740800189093,\n    \"dataYear\": 2126\n  },\n  {\n    \"dataID\": 5937,\n    \"codeID\": 2859,\n    \"regionID\": 5274,\n    \"score\": 1532.914692862426,\n    \"dataYear\": 6378\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b5091a13-19ae-47f6-8639-8fb0c89ee4ab",
+          "name": "Get IDI scores for one region",
+          "request": {
+            "name": "Get IDI scores for one region",
+            "description": {
+              "content": "Returns the IDI pillar and indicator scores aggregated for a single region.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "idi",
+                "region",
+                "byregionid",
+                ":regionID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "regionID",
+                  "description": "(Required) The region identifier, from `listRegions`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "65075c55-2db0-4588-8494-6aeda9f11a0c",
+              "name": "The region's IDI scores.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "idi",
+                    "region",
+                    "byregionid",
+                    ":regionID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "regionID",
+                      "description": "(Required) The region identifier, from `listRegions`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"regionID\": 3,\n    \"dataID\": 2026003005,\n    \"codeID\": 5,\n    \"score\": 56.355555555555554,\n    \"dataYear\": 2026\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "1d1913bc-f7f1-4f1d-a890-0227c480a31a",
+      "name": "UMC",
+      "description": {
+        "content": "Universal and Meaningful Connectivity targets and scores.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e07c172f-b781-4c10-b589-1478697a0211",
+          "name": "Get the Universal and Meaningful Connectivity dashboard",
+          "request": {
+            "name": "Get the Universal and Meaningful Connectivity dashboard",
+            "description": {
+              "content": "Returns every UMC indicator with its target definition — the target name, description, minimum and maximum target values, units, source, and the topic and macro it rolls into.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "umc",
+                "dashboard",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "877d2d5e-d0ea-4dd6-8ae9-33e415fc7461",
+              "name": "The UMC indicator and target definitions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "umc",
+                    "dashboard",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 8331,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"indicatorLabel\": \"string\",\n    \"codeDesc\": \"string\",\n    \"units\": \"string\",\n    \"source\": \"string\",\n    \"archive\": true,\n    \"topicID\": 4580,\n    \"macroID\": 1628,\n    \"targetName\": \"string\",\n    \"targetDesc\": \"string\",\n    \"targetMinValue\": 992.5179185086286,\n    \"targetMaxValue\": 989.7438372951727,\n    \"createDate\": 2631,\n    \"updateDate\": 3987\n  },\n  {\n    \"codeID\": 9000,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"indicatorLabel\": \"string\",\n    \"codeDesc\": \"string\",\n    \"units\": \"string\",\n    \"source\": \"string\",\n    \"archive\": false,\n    \"topicID\": 8119,\n    \"macroID\": 9698,\n    \"targetName\": \"string\",\n    \"targetDesc\": \"string\",\n    \"targetMinValue\": 465.00047548778343,\n    \"targetMaxValue\": 4060.7760056515085,\n    \"createDate\": 3504,\n    \"updateDate\": 7686\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a8cd32ca-7b97-4af3-af12-ef7f918d0c5d",
+          "name": "List UMC topics",
+          "request": {
+            "name": "List UMC topics",
+            "description": {
+              "content": "Returns the six UMC topics — People, Homes, Businesses, Affordability, Schools, Infrastructure.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "umc",
+                "topic",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9a0fd2e9-8795-40ad-9fc1-87a0d6460a6c",
+              "name": "The topic list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "umc",
+                    "topic",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"topicID\": 1,\n    \"label\": \"People\"\n  },\n  {\n    \"topicID\": 2,\n    \"label\": \"Homes\"\n  },\n  {\n    \"topicID\": 3,\n    \"label\": \"Businesses\"\n  },\n  {\n    \"topicID\": 4,\n    \"label\": \"Affordability\"\n  },\n  {\n    \"topicID\": 5,\n    \"label\": \"Schools\"\n  },\n  {\n    \"topicID\": 6,\n    \"label\": \"Infrastructure\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f14ecf4-e147-415f-beb0-e96419600ab6",
+          "name": "List UMC macro categories",
+          "request": {
+            "name": "List UMC macro categories",
+            "description": {
+              "content": "Returns the two UMC macro categories — Universal connectivity and Meaningful connectivity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "umc",
+                "macro",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3d154b10-89bb-4c9e-9dec-b54f3805ad29",
+              "name": "The macro list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "umc",
+                    "macro",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"macroID\": 1,\n    \"label\": \"Universal connectivity\"\n  },\n  {\n    \"macroID\": 2,\n    \"label\": \"Meaningful connectivity\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21c5bb30-b679-41c6-91af-dff6977316f5",
+          "name": "List UMC target bands",
+          "request": {
+            "name": "List UMC target bands",
+            "description": {
+              "content": "Returns the UMC scoring bands used to colour the dashboard — No data, Limited, Satisfactory, Advanced, Target met — with the numeric range each band covers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "umc",
+                "target",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "42bd27fc-ddec-4c77-b632-e3b0161439a4",
+              "name": "The target bands.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "umc",
+                    "target",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"targetID\": 0,\n    \"min\": -1,\n    \"max\": -1,\n    \"label\": \"No data\"\n  },\n  {\n    \"targetID\": 1,\n    \"min\": 0,\n    \"max\": 50,\n    \"label\": \"Limited\"\n  },\n  {\n    \"targetID\": 2,\n    \"min\": 50,\n    \"max\": 75,\n    \"label\": \"Satisfactory\"\n  },\n  {\n    \"targetID\": 3,\n    \"min\": 75,\n    \"max\": 95,\n    \"label\": \"Advanced\"\n  },\n  {\n    \"targetID\": 4,\n    \"min\": 95,\n    \"max\": 100,\n    \"label\": \"Target met\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9c4b9dc-dc9e-4b2d-aa31-94499183c841",
+          "name": "Get UMC scores for one country",
+          "request": {
+            "name": "Get UMC scores for one country",
+            "description": {
+              "content": "Returns every UMC indicator scored for a single country, keyed by the ITU `CountryID`, with the observed value alongside the target definition it is measured against.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "umc",
+                "bycountryid",
+                ":countryID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "countryID",
+                  "description": "(Required) The ITU numeric country identifier, from `listCountries`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dacd58c1-238d-402e-a45d-7c4952a049db",
+              "name": "The country's UMC scores.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "umc",
+                    "bycountryid",
+                    ":countryID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "countryID",
+                      "description": "(Required) The ITU numeric country identifier, from `listCountries`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"codeID\": 7527,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"units\": \"string\",\n    \"source\": \"string\",\n    \"archive\": true,\n    \"topicID\": 5378,\n    \"topicTarget\": \"string\",\n    \"macroID\": 3069,\n    \"macroTarget\": \"string\",\n    \"targetName\": \"string\",\n    \"targetDesc\": \"string\",\n    \"targetMinValue\": 4367.498272625693,\n    \"targetMaxValue\": 7062.348331695467,\n    \"rawMinValue\": 9782.040718498472,\n    \"rawMaxValue\": 2746.5414914579887\n  },\n  {\n    \"codeID\": 8710,\n    \"code\": \"string\",\n    \"label\": \"string\",\n    \"units\": \"string\",\n    \"source\": \"string\",\n    \"archive\": true,\n    \"topicID\": 5471,\n    \"topicTarget\": \"string\",\n    \"macroID\": 3490,\n    \"macroTarget\": \"string\",\n    \"targetName\": \"string\",\n    \"targetDesc\": \"string\",\n    \"targetMinValue\": 7963.677666554409,\n    \"targetMaxValue\": 6780.343915574005,\n    \"rawMinValue\": 6131.925952432681,\n    \"rawMaxValue\": 700.3756298985386\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "bc139e91-f384-458b-ab07-641d850cef20",
+      "name": "Methodology",
+      "description": {
+        "content": "Dataset provenance and the owning ITU divisions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b6b1832-078b-4b59-a06c-c24484b6c80f",
+          "name": "List the source datasets behind DataHub",
+          "request": {
+            "name": "List the source datasets behind DataHub",
+            "description": {
+              "content": "Returns the ITU datasets that feed DataHub — short name, type (quantitative or qualitative), the owning ITU division and its contact email, whether the dataset is publicly visible, and whether it has frozen public data.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "methodology",
+                "dataset"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2adcc8d2-d2ad-44a9-9275-6e0e22e220bf",
+              "name": "The dataset inventory.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "methodology",
+                    "dataset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"datasetID\": 1,\n    \"datasetShortName\": \"WTI\",\n    \"datasetType\": \"Quantitative\",\n    \"teamShortName\": \"IDA\",\n    \"teamName\": \"ICT DATA & ANALYTICS DIVISION\",\n    \"email\": \"indicators@itu.int\",\n    \"publiclyVisible\": true,\n    \"hasFrozenPublicData\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.datahub.itu.int/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "86d91b15-928d-49de-be12-1f30896e85e3",
+    "name": "ITU DataHub API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API. This document is an API Evangelist **observed-behaviour** description: every path, parameter, status code and response shape below was recorded from live, anonymous HTTP calls against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a behaviour was not observed it is simply absent.\n\nThe route templates were recovered from the DataHub Next.js client bundle (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists and to capture its real response. Treat this surface as an internal backend that happens to be public rather than as a supported product API: it can change without notice.\n\nNo authentication of any kind is required. No API key, no `Referer`, no `Origin`, no `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).\n\nContact Support:\n Name: ITU ICT Data & Analytics Division\n Email: indicators@itu.int",
+      "type": "text/plain"
+    }
+  }
+}

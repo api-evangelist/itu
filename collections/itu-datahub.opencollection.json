@@ -1,0 +1,332 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ITU DataHub API",
+    "version": "2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reference",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all countries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/country/all"
+          },
+          "docs": "Returns the full ITU country reference list — 200-plus economies with their ITU CountryID, ISO 3166-1 alpha-3 code, short and long names, and every regional grouping the country belongs to (ITU/BDT classification, UN M49, World Bank income group)."
+        },
+        {
+          "info": {
+            "name": "List all regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/region/all"
+          },
+          "docs": "Returns every regional grouping used across DataHub — the ITU/BDT classification (Africa, Americas, Arab States, Asia & Pacific, CIS, Europe), UN M49 groupings including LDC/LLDC/SIDS, and World Bank income classes by year."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Indicators",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the indicator dictionary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/dictionaries/getcategories"
+          },
+          "docs": "Returns the complete DataHub indicator dictionary as a category / sub-category / item tree. Each leaf item carries the `codeID` used by the data endpoints, its label, the owning `databaseID`, and whether it is a collection indicator."
+        },
+        {
+          "info": {
+            "name": "Get one indicator definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/dictionaries/getbyid/:codeID",
+            "params": [
+              {
+                "name": "codeID",
+                "value": "11624",
+                "type": "path",
+                "description": "The DataHub indicator identifier, from `getIndicatorCategories`."
+              }
+            ]
+          },
+          "docs": "Returns the full metadata record for a single indicator — label, description, units, answer type, start and end year, category placement, the list of countries with data (`availableCountries`), sibling and disaggregation series, and the landing page."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an indicator time series for every country",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/data/bycode/:codeID",
+            "params": [
+              {
+                "name": "codeID",
+                "value": "11624",
+                "type": "path",
+                "description": "The DataHub indicator identifier, from `getIndicatorCategories`."
+              }
+            ]
+          },
+          "docs": "Returns the full observed time series for one indicator across every country — one record per country-year, each with the value, the reporting source, and any data note. Responses are large (the Internet-users series returns roughly 1.1 MB)."
+        },
+        {
+          "info": {
+            "name": "Get an indicator time series for one country",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/data/bycode/:codeID/byiso/:iso",
+            "params": [
+              {
+                "name": "codeID",
+                "value": "11624",
+                "type": "path",
+                "description": "The DataHub indicator identifier, from `getIndicatorCategories`."
+              },
+              {
+                "name": "iso",
+                "value": "USA",
+                "type": "path",
+                "description": "ISO 3166-1 alpha-3 country code, from `listCountries`."
+              }
+            ]
+          },
+          "docs": "Returns the observed time series for one indicator filtered to a single country by its ISO 3166-1 alpha-3 code. The country-scoped form of `getDataByCode`, and the practical way to use this API without downloading the whole series."
+        },
+        {
+          "info": {
+            "name": "Get a regional aggregate series for an indicator",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/aggregation/bycodeid/:codeID/byregionid/:regionID",
+            "params": [
+              {
+                "name": "codeID",
+                "value": "11624",
+                "type": "path",
+                "description": "The DataHub indicator identifier, from `getIndicatorCategories`."
+              },
+              {
+                "name": "regionID",
+                "value": "3",
+                "type": "path",
+                "description": "The region identifier, from `listRegions`."
+              }
+            ]
+          },
+          "docs": "Returns the ITU-computed regional aggregate for one indicator and one region — one record per year with the aggregate value and, where applicable, the percentage form."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Dashboards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List DataHub dashboards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/dashboard/all"
+          },
+          "docs": "Returns every curated DataHub dashboard with its name, category, description, and the full set of indicator codes it renders including each code's disaggregations, units, visibility and coverage years."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "IDI",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the ICT Development Index structure",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/idi/dashboard/all"
+          },
+          "docs": "Returns the IDI composite tree — the index, its Universal connectivity and Meaningful connectivity pillars, and the underlying indicators each pillar scores."
+        },
+        {
+          "info": {
+            "name": "List available IDI editions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/idi/dashboard/version"
+          },
+          "docs": "Returns the list of IDI edition years available in DataHub."
+        },
+        {
+          "info": {
+            "name": "Get IDI scores for one country",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/idi/data/bycountryid/:countryID",
+            "params": [
+              {
+                "name": "countryID",
+                "value": "244",
+                "type": "path",
+                "description": "The ITU numeric country identifier, from `listCountries`."
+              }
+            ]
+          },
+          "docs": "Returns the IDI pillar and indicator scores for a single country, keyed by the ITU `CountryID` from `listCountries` (not the ISO code)."
+        },
+        {
+          "info": {
+            "name": "Get IDI scores for one region",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/idi/region/byregionid/:regionID",
+            "params": [
+              {
+                "name": "regionID",
+                "value": "3",
+                "type": "path",
+                "description": "The region identifier, from `listRegions`."
+              }
+            ]
+          },
+          "docs": "Returns the IDI pillar and indicator scores aggregated for a single region."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "UMC",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the Universal and Meaningful Connectivity dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/umc/dashboard/all"
+          },
+          "docs": "Returns every UMC indicator with its target definition — the target name, description, minimum and maximum target values, units, source, and the topic and macro it rolls into."
+        },
+        {
+          "info": {
+            "name": "List UMC topics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/umc/topic/all"
+          },
+          "docs": "Returns the six UMC topics — People, Homes, Businesses, Affordability, Schools, Infrastructure."
+        },
+        {
+          "info": {
+            "name": "List UMC macro categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/umc/macro/all"
+          },
+          "docs": "Returns the two UMC macro categories — Universal connectivity and Meaningful connectivity."
+        },
+        {
+          "info": {
+            "name": "List UMC target bands",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/umc/target/all"
+          },
+          "docs": "Returns the UMC scoring bands used to colour the dashboard — No data, Limited, Satisfactory, Advanced, Target met — with the numeric range each band covers."
+        },
+        {
+          "info": {
+            "name": "Get UMC scores for one country",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/umc/bycountryid/:countryID",
+            "params": [
+              {
+                "name": "countryID",
+                "value": "244",
+                "type": "path",
+                "description": "The ITU numeric country identifier, from `listCountries`."
+              }
+            ]
+          },
+          "docs": "Returns every UMC indicator scored for a single country, keyed by the ITU `CountryID`, with the observed value alongside the target definition it is measured against."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Methodology",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the source datasets behind DataHub",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.datahub.itu.int/v2/methodology/dataset"
+          },
+          "docs": "Returns the ITU datasets that feed DataHub — short name, type (quantitative or qualitative), the owning ITU division and its contact email, whether the dataset is publicly visible, and whether it has frozen public data."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

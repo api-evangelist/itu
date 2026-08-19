@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ITU Proximity to Fibre Node API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Proximity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Score coordinates by proximity range to the nearest fibre node",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://bbmaps.itu.int/functionproximity/route-calcdistancetonode",
+            "auth": {
+              "type": "apikey",
+              "key": "code",
+              "value": "{{code}}",
+              "placement": "query"
+            }
+          },
+          "docs": "Accepts a CSV of coordinates and returns the proximity band from each point to the nearest terrestrial fibre node in the ITU Broadband Maps data — for example `within 10km` or `>100km`. ITU's own client labels this \"Proximity range to nearest Fiber node\".\n\nThe response body is a bare URL (plain text) to a generated ZIP containing one CSV with the original `X` and `Y` columns plus a `proximity` column."
+        },
+        {
+          "info": {
+            "name": "Flag coordinates within 10km of a fibre node",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://bbmaps.itu.int/functionproximity/route-calc10kmintersection",
+            "auth": {
+              "type": "apikey",
+              "key": "code",
+              "value": "{{code}}",
+              "placement": "query"
+            }
+          },
+          "docs": "Accepts a CSV of coordinates and returns, for each point, whether it falls within 10km of a terrestrial fibre node — ITU's client documents the output as `in10km: 0 = no, 1 = yes`. The binary form of `calcDistanceToNode`, and the surface behind the Broadband Maps \"population within reach of fibre node\" layers."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

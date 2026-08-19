@@ -1,0 +1,396 @@
+{
+  "item": [
+    {
+      "id": "7536529b-6a3f-4451-911f-39725f7321ad",
+      "name": "Proximity",
+      "description": {
+        "content": "Batch proximity scoring of coordinates against the ITU Interactive Transmission Map.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a50e7451-005a-4eac-838a-1113b5fe3fba",
+          "name": "Score coordinates by proximity range to the nearest fibre node",
+          "request": {
+            "name": "Score coordinates by proximity range to the nearest fibre node",
+            "description": {
+              "content": "Accepts a CSV of coordinates and returns the proximity band from each point to the nearest terrestrial fibre node in the ITU Broadband Maps data — for example `within 10km` or `>100km`. ITU's own client labels this \"Proximity range to nearest Fiber node\".\n\nThe response body is a bare URL (plain text) to a generated ZIP containing one CSV with the original `X` and `Y` columns plus a `proximity` column.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "route-calcdistancetonode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/csv"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "code"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "query"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>"
+            }
+          },
+          "response": [
+            {
+              "id": "29a197d5-77e8-416f-825e-094e52941398",
+              "name": "A bare URL, as `text/plain`, to a generated ZIP of results under https://bbmaps.itu.int/api/output/. The ZIP contains one CSV named `exported_data_<YYYYMMDD>_<HHMMSS>_<uuid>.csv`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "route-calcdistancetonode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "X,Y\n12.077916619646288,-15.22124972669551\n22.361249911846286,-11.80458307369551\n12.086249952946288,-15.21291639339551\n"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "https://bbmaps.itu.int/api/output/exported_data_20260726_023009_8c5a21de-f1f8-4c53-a499-ccd98b137037.zip",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4af01b0d-f0ec-4fcb-93f0-38fe421422aa",
+              "name": "Returned with an empty body when the `code` query parameter is missing or does not match a valid function key. Confirmed on both an absent key and a bogus key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "route-calcdistancetonode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "X,Y\n12.077916619646288,-15.22124972669551\n22.361249911846286,-11.80458307369551\n12.086249952946288,-15.21291639339551\n"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "624d1c84-13b5-4c02-99b9-7d2b57caac69",
+              "name": "Returned as plain text when the CSV body cannot be processed — most commonly a missing required column. Not RFC 9457 problem+json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "route-calcdistancetonode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "X,Y\n12.077916619646288,-15.22124972669551\n22.361249911846286,-11.80458307369551\n12.086249952946288,-15.21291639339551\n"
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Error in import_csv_distance: CSV file is missing required columns: ['X', 'Y']",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a7241bef-2e29-472e-a841-73b1f02332c9",
+          "name": "Flag coordinates within 10km of a fibre node",
+          "request": {
+            "name": "Flag coordinates within 10km of a fibre node",
+            "description": {
+              "content": "Accepts a CSV of coordinates and returns, for each point, whether it falls within 10km of a terrestrial fibre node — ITU's client documents the output as `in10km: 0 = no, 1 = yes`. The binary form of `calcDistanceToNode`, and the surface behind the Broadband Maps \"population within reach of fibre node\" layers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "route-calc10kmintersection"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/csv"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "code"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "query"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>"
+            }
+          },
+          "response": [
+            {
+              "id": "1f8ebd6a-e57a-41bb-9f3d-9b2b86db8d36",
+              "name": "A bare URL, as `text/plain`, to a generated ZIP of results under https://bbmaps.itu.int/api/output/. The ZIP contains one CSV named `exported_data_<YYYYMMDD>_<HHMMSS>_<uuid>.csv`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "route-calc10kmintersection"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "X,Y\n12.077916619646288,-15.22124972669551\n22.361249911846286,-11.80458307369551\n"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "https://bbmaps.itu.int/api/output/exported_data_20260726_023009_8c5a21de-f1f8-4c53-a499-ccd98b137037.zip",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3968e50b-e6b9-4efc-a11d-a4194bac56e7",
+              "name": "Returned with an empty body when the `code` query parameter is missing or does not match a valid function key. Confirmed on both an absent key and a bogus key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "route-calc10kmintersection"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "X,Y\n12.077916619646288,-15.22124972669551\n22.361249911846286,-11.80458307369551\n"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "91350c30-1e0a-4355-92e7-589e081ea6b8",
+              "name": "Returned as plain text when the CSV body cannot be processed — most commonly a missing required column. Not RFC 9457 problem+json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "route-calc10kmintersection"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "X,Y\n12.077916619646288,-15.22124972669551\n22.361249911846286,-11.80458307369551\n"
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Error in import_csv_distance: CSV file is missing required columns: ['X', 'Y']",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://bbmaps.itu.int/functionproximity",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "de4a4a06-1566-47dd-8010-73c04845c99e",
+    "name": "ITU Proximity to Fibre Node API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "ITU-D publishes this API as a **demonstration** on a single page — \"API - Proximity to Fibre Node\" — with a sample CSV and a prose explanation, but no base URL, no endpoint reference, no parameter table, and no OpenAPI. This document is an API Evangelist **observed-behaviour** description: both routes, the `code` query parameter, the `text/csv` request contract, the plain-text ZIP-URL response, and every status code below were confirmed with live calls on 2026-07-26 using ITU's own published `sample_api.csv`.\n\nThe routes and their function keys were recovered from ITU's public web client at `https://bbmaps.itu.int/web10km/`, which hardcodes both. The service runs on Azure Functions; access is by a function key passed as `?code=`, and because ITU embeds that key in a public client the surface is effectively open — there is no signup path to obtain a key of your own.\n\nThe API is **batch and asynchronous in shape**: you POST a CSV body of coordinates and receive a plain-text URL to a generated ZIP under `https://bbmaps.itu.int/api/output/`, which contains a CSV with your input rows plus the computed column.\n\nContact Support:\n Name: ITU Telecommunication Development Bureau (BDT)",
+      "type": "text/plain"
+    }
+  }
+}
