@@ -33,61 +33,176 @@ created: '2026-07-25'
 modified: '2026-07-26'
 specificationVersion: '0.23'
 apis:
-- aid: itu:itu-datahub-api
-  name: ITU DataHub API
-  description: >-
-    The undocumented JSON API that serves the ITU DataHub (datahub.itu.int), ITU's official ICT
-    statistics portal and the successor to ICT Eye. Confirmed anonymously callable on 2026-07-25 with
-    no key, header, or referer required — /v2/country/all returns the full country reference list,
-    /v2/region/all the ITU/BDT and UN M49 groupings, /v2/dictionaries/getcategories the full indicator
-    dictionary, /v2/data/bycode/{codeID} the time series for an indicator, and /v2/idi/* and /v2/umc/*
-    the ICT Development Index and Universal Meaningful Connectivity dashboards. ITU publishes no
-    documentation, no OpenAPI, and no terms of programmatic use for this surface; the endpoint list
-    was recovered from the DataHub client bundle, so it should be treated as an internal backend that
-    happens to be public rather than as a supported product API.
+- aid: itu:itu-dashboards-api
+  name: ITU Dashboards API
+  description: Curated DataHub dashboard definitions.
   humanURL: https://datahub.itu.int/
   baseURL: https://api.datahub.itu.int/v2
   tags:
-  - ICT Statistics
-  - Open Data
-  - Indicators
-  - Connectivity
-  - Regulator
+  - Dashboards
   properties:
   - type: OpenAPI
-    url: openapi/itu-datahub-openapi.yml
-  - type: Overlay
-    url: overlays/itu-datahub-overlay.yaml
+    url: openapi/itu-dashboards-api-openapi.yml
   - type: Documentation
     url: https://datahub.itu.int/
   - type: APIReference
     url: https://datahub.itu.int/data
   - type: Documentation
     url: https://www.itu.int/itu-d/reports/statistics/
-- aid: itu:itu-proximity-to-fibre-node-api
-  name: ITU Proximity to Fibre Node API
-  description: >-
-    An ITU-D Technology and Network Development API that scores a batch of coordinates against the ITU
-    Interactive Transmission Map (Broadband Maps) fibre network data. Two routes are published on the
-    ITU-D demonstration page — route-calcdistancetonode returns the proximity band to the nearest
-    fibre node, and route-calc10kmintersection returns a within-10km flag. Both accept a POSTed
-    text/csv body with X and Y columns and return a URL to a generated ZIP of results; both were
-    confirmed returning HTTP 200 with real output on 2026-07-25. Access is by an Azure Functions
-    function key passed as a ?code= query parameter that ITU embeds in the public web client, so it is
-    effectively open; there is no signup, no OpenAPI, and no rate limit published.
-  humanURL: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
-  baseURL: https://bbmaps.itu.int/functionproximity
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-data-api
+  name: ITU Data API
+  description: Indicator time series, by indicator, country and region aggregate.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
   tags:
-  - Broadband
-  - Fibre
-  - Geospatial
-  - Connectivity
-  - Open Data
+  - Data
   properties:
   - type: OpenAPI
-    url: openapi/itu-proximity-openapi.yml
-  - type: Overlay
-    url: overlays/itu-proximity-overlay.yaml
+    url: openapi/itu-data-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-idi-api
+  name: ITU IDI API
+  description: ICT Development Index composite scores.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - IDI
+  properties:
+  - type: OpenAPI
+    url: openapi/itu-idi-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-indicators-api
+  name: ITU Indicators API
+  description: The indicator dictionary — categories, definitions, units and coverage.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - Indicators
+  properties:
+  - type: OpenAPI
+    url: openapi/itu-indicators-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-methodology-api
+  name: ITU Methodology API
+  description: Dataset provenance and the owning ITU divisions.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - Methodology
+  properties:
+  - type: OpenAPI
+    url: openapi/itu-methodology-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-proximity-api
+  name: ITU Proximity API
+  description: Batch proximity scoring of coordinates against the ITU Interactive Transmission Map.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - Proximity
+  properties:
+  - type: OpenAPI
+    url: openapi/itu-proximity-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-reference-api
+  name: ITU Reference API
+  description: Country and region reference data.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - Reference
+  properties:
+  - type: OpenAPI
+    url: openapi/itu-reference-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: APIReference
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
+  - type: Documentation
+    url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
+- aid: itu:itu-umc-api
+  name: ITU UMC API
+  description: Universal and Meaningful Connectivity targets and scores.
+  humanURL: https://datahub.itu.int/
+  baseURL: https://api.datahub.itu.int/v2
+  tags:
+  - UMC
+  properties:
+  - type: OpenAPI
+    url: openapi/itu-umc-api-openapi.yml
+  - type: Documentation
+    url: https://datahub.itu.int/
+  - type: APIReference
+    url: https://datahub.itu.int/data
+  - type: Documentation
+    url: https://www.itu.int/itu-d/reports/statistics/
   - type: Documentation
     url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
   - type: APIReference
@@ -95,6 +210,10 @@ apis:
   - type: Documentation
     url: https://www.itu.int/en/ITU-D/Technology/Pages/InteractiveTransmissionMaps.aspx
 common:
+- type: Overlay
+  url: overlays/itu-datahub-overlay.yaml
+- type: Overlay
+  url: overlays/itu-proximity-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/itu-agentic-access.yml
 - type: Authentication
