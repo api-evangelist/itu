@@ -17,6 +17,18 @@ description: >-
   GitHub organization has zero public repositories. ITU is not a CAMARA participant and not a GSMA
   Open Gateway operator; network APIs are being standardised outside the UN system, and ITU's role
   in that layer is limited to the IMT requirements framework rather than any callable interface.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Telecommunications
