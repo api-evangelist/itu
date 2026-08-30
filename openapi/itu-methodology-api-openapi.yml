@@ -1,0 +1,87 @@
+openapi: 3.2.0
+info:
+  title: ITU DataHub Methodology API
+  version: '2'
+  summary: Undocumented public JSON API behind the ITU DataHub ICT statistics portal.
+  description: 'ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API. This document is an API Evangelist **observed-behaviour** description: every path, parameter, status code and response shape below was recorded from live, anonymous HTTP calls against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a behaviour was not observed it is simply absent.
+
+
+    The route templates were recovered from the DataHub Next.js client bundle (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists and to capture its real response. Treat this surface as an internal backend that happens to be public rather than as a supported product API: it can change without notice.
+
+
+    No authentication of any kind is required. No API key, no `Referer`, no `Origin`, no `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).'
+  contact:
+    name: ITU ICT Data & Analytics Division
+    email: indicators@itu.int
+    url: https://datahub.itu.int/
+  license:
+    name: ITU Terms of Use
+    url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+  x-apievangelist-provenance:
+    method: derived
+    derived_from: live anonymous HTTP probes + the public DataHub client bundle
+    probed: '2026-07-26'
+    provider_published_spec: false
+    note: Derived by API Evangelist from observed responses. ITU has not published, reviewed, or endorsed this description.
+servers:
+- url: https://api.datahub.itu.int/v2
+  description: Production (AWS API Gateway + CloudFront). Anonymous.
+tags:
+- name: Methodology
+  description: Dataset provenance and the owning ITU divisions.
+paths:
+  /methodology/dataset:
+    get:
+      operationId: listDatasets
+      tags:
+      - Methodology
+      summary: List the source datasets behind DataHub
+      description: Returns the ITU datasets that feed DataHub — short name, type (quantitative or qualitative), the owning ITU division and its contact email, whether the dataset is publicly visible, and whether it has frozen public data.
+      responses:
+        '200':
+          description: The dataset inventory.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+              examples:
+                wti:
+                  value:
+                  - datasetID: 1
+                    datasetShortName: WTI
+                    datasetType: Quantitative
+                    teamShortName: IDA
+                    teamName: ICT DATA & ANALYTICS DIVISION
+                    email: indicators@itu.int
+                    publiclyVisible: true
+                    hasFrozenPublicData: true
+components:
+  schemas:
+    Dataset:
+      type: object
+      properties:
+        datasetID:
+          type: integer
+        datasetShortName:
+          type: string
+        datasetType:
+          type: string
+          enum:
+          - Quantitative
+          - Qualitative
+        teamShortName:
+          type: string
+        teamName:
+          type: string
+        email:
+          type: string
+          format: email
+        publiclyVisible:
+          type: boolean
+        hasFrozenPublicData:
+          type: boolean
+externalDocs:
+  description: ITU DataHub portal (the only human surface for this API)
+  url: https://datahub.itu.int/

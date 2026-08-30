@@ -1,0 +1,252 @@
+openapi: 3.2.0
+info:
+  title: ITU DataHub Data API
+  version: '2'
+  summary: Undocumented public JSON API behind the ITU DataHub ICT statistics portal.
+  description: 'ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API. This document is an API Evangelist **observed-behaviour** description: every path, parameter, status code and response shape below was recorded from live, anonymous HTTP calls against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a behaviour was not observed it is simply absent.
+
+
+    The route templates were recovered from the DataHub Next.js client bundle (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists and to capture its real response. Treat this surface as an internal backend that happens to be public rather than as a supported product API: it can change without notice.
+
+
+    No authentication of any kind is required. No API key, no `Referer`, no `Origin`, no `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).'
+  contact:
+    name: ITU ICT Data & Analytics Division
+    email: indicators@itu.int
+    url: https://datahub.itu.int/
+  license:
+    name: ITU Terms of Use
+    url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+  x-apievangelist-provenance:
+    method: derived
+    derived_from: live anonymous HTTP probes + the public DataHub client bundle
+    probed: '2026-07-26'
+    provider_published_spec: false
+    note: Derived by API Evangelist from observed responses. ITU has not published, reviewed, or endorsed this description.
+servers:
+- url: https://api.datahub.itu.int/v2
+  description: Production (AWS API Gateway + CloudFront). Anonymous.
+tags:
+- name: Data
+  description: Indicator time series, by indicator, country and region aggregate.
+paths:
+  /data/bycode/{codeID}:
+    get:
+      operationId: getDataByCode
+      tags:
+      - Data
+      summary: Get an indicator time series for every country
+      description: Returns the full observed time series for one indicator across every country — one record per country-year, each with the value, the reporting source, and any data note. Responses are large (the Internet-users series returns roughly 1.1 MB).
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      responses:
+        '200':
+          description: The time series. An unknown `codeID` returns HTTP 200 with an empty array rather than a 404 — observed on `codeID=999999999`.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataPoint'
+              examples:
+                internetUsersAruba:
+                  summary: First element of the live response for codeID 11624
+                  value:
+                  - codeID: 11624
+                    shortName: Aruba
+                    dataID: 4790044
+                    dataNote: ''
+                    dataYear: 2000
+                    code: i99H
+                    dataSource: Servicio di Telecomunicacion di Aruba (SETAR).
+                    answer:
+                    - value: '15.4428229480349'
+                      id: 4790044
+                    countryID: 4
+                    isoCode: ABW
+  /data/bycode/{codeID}/byiso/{iso}:
+    get:
+      operationId: getDataByCodeAndIso
+      tags:
+      - Data
+      summary: Get an indicator time series for one country
+      description: Returns the observed time series for one indicator filtered to a single country by its ISO 3166-1 alpha-3 code. The country-scoped form of `getDataByCode`, and the practical way to use this API without downloading the whole series.
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      - $ref: '#/components/parameters/iso'
+      responses:
+        '200':
+          description: The country time series. An unrecognised ISO code returns HTTP 200 with an empty array — observed on `iso=ZZZ`.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataPoint'
+              examples:
+                internetUsersUSA:
+                  value:
+                  - codeID: 11624
+                    shortName: United States
+                    answer:
+                    - value: '43.0791626375201'
+                      id: 4792974
+                    dataID: 4792974
+                    code: i99H
+                    isoCode: USA
+                    dataNote: ''
+                    dataYear: 2000
+                    countryID: 244
+                    dataSource: ITU estimate.
+  /aggregation/bycodeid/{codeID}/byregionid/{regionID}:
+    get:
+      operationId: getRegionalAggregate
+      tags:
+      - Data
+      summary: Get a regional aggregate series for an indicator
+      description: Returns the ITU-computed regional aggregate for one indicator and one region — one record per year with the aggregate value and, where applicable, the percentage form.
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      - $ref: '#/components/parameters/regionID'
+      responses:
+        '200':
+          description: The regional aggregate series.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AggregatePoint'
+              examples:
+                arabStates2005:
+                  value:
+                  - codeID: 11624
+                    code: i99H
+                    regionID: 647
+                    regionName: Arab States
+                    classID: 177
+                    dataYear: 2005
+                    dataID: 71287
+                    databaseID: 1
+                    answer:
+                    - value: 8.6
+                    answersPercentage:
+                    - value: 8.6
+                    createDate: '2024-04-24T18:20:23.000Z'
+                    updateDate: '2025-11-17T13:13:18.000Z'
+                    numberOfAnswer: null
+                    internalNote: null
+components:
+  schemas:
+    AggregatePoint:
+      type: object
+      description: One region-year aggregate of an indicator, computed by ITU.
+      properties:
+        dataID:
+          type: integer
+        codeID:
+          type: integer
+        code:
+          type: string
+        regionID:
+          type: integer
+        regionName:
+          type: string
+        classID:
+          type: integer
+        databaseID:
+          type: integer
+        dataYear:
+          type: integer
+        answer:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+        answersPercentage:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+        numberOfAnswer:
+          type:
+          - integer
+          - 'null'
+        internalNote:
+          type:
+          - string
+          - 'null'
+        createDate:
+          type: string
+          format: date-time
+        updateDate:
+          type: string
+          format: date-time
+    DataPoint:
+      type: object
+      description: One country-year observation of an indicator.
+      properties:
+        dataID:
+          type: integer
+        codeID:
+          type: integer
+        code:
+          type: string
+        countryID:
+          type: integer
+        isoCode:
+          type: string
+        shortName:
+          type: string
+        dataYear:
+          type: integer
+        dataSource:
+          type: string
+          description: The reporting source
+          e.g. a national regulator or "ITU estimate.".: null
+        dataNote:
+          type: string
+        answer:
+          type: array
+          description: The observed value. Values are returned as strings on this endpoint.
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              id:
+                type: integer
+  parameters:
+    iso:
+      name: iso
+      in: path
+      required: true
+      description: ISO 3166-1 alpha-3 country code, from `listCountries`.
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 3
+      example: USA
+    regionID:
+      name: regionID
+      in: path
+      required: true
+      description: The region identifier, from `listRegions`.
+      schema:
+        type: integer
+      example: 3
+    codeID:
+      name: codeID
+      in: path
+      required: true
+      description: The DataHub indicator identifier, from `getIndicatorCategories`.
+      schema:
+        type: integer
+      example: 11624
+externalDocs:
+  description: ITU DataHub portal (the only human surface for this API)
+  url: https://datahub.itu.int/

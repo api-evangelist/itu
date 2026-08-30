@@ -1,0 +1,198 @@
+openapi: 3.2.0
+info:
+  title: ITU DataHub Indicators API
+  version: '2'
+  summary: Undocumented public JSON API behind the ITU DataHub ICT statistics portal.
+  description: 'ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API. This document is an API Evangelist **observed-behaviour** description: every path, parameter, status code and response shape below was recorded from live, anonymous HTTP calls against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a behaviour was not observed it is simply absent.
+
+
+    The route templates were recovered from the DataHub Next.js client bundle (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists and to capture its real response. Treat this surface as an internal backend that happens to be public rather than as a supported product API: it can change without notice.
+
+
+    No authentication of any kind is required. No API key, no `Referer`, no `Origin`, no `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).'
+  contact:
+    name: ITU ICT Data & Analytics Division
+    email: indicators@itu.int
+    url: https://datahub.itu.int/
+  license:
+    name: ITU Terms of Use
+    url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+  x-apievangelist-provenance:
+    method: derived
+    derived_from: live anonymous HTTP probes + the public DataHub client bundle
+    probed: '2026-07-26'
+    provider_published_spec: false
+    note: Derived by API Evangelist from observed responses. ITU has not published, reviewed, or endorsed this description.
+servers:
+- url: https://api.datahub.itu.int/v2
+  description: Production (AWS API Gateway + CloudFront). Anonymous.
+tags:
+- name: Indicators
+  description: The indicator dictionary — categories, definitions, units and coverage.
+paths:
+  /dictionaries/getcategories:
+    get:
+      operationId: getIndicatorCategories
+      tags:
+      - Indicators
+      summary: Get the indicator dictionary
+      description: Returns the complete DataHub indicator dictionary as a category / sub-category / item tree. Each leaf item carries the `codeID` used by the data endpoints, its label, the owning `databaseID`, and whether it is a collection indicator.
+      responses:
+        '200':
+          description: The indicator dictionary tree.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndicatorCategory'
+  /dictionaries/getbyid/{codeID}:
+    get:
+      operationId: getIndicatorById
+      tags:
+      - Indicators
+      summary: Get one indicator definition
+      description: Returns the full metadata record for a single indicator — label, description, units, answer type, start and end year, category placement, the list of countries with data (`availableCountries`), sibling and disaggregation series, and the landing page.
+      parameters:
+      - $ref: '#/components/parameters/codeID'
+      responses:
+        '200':
+          description: The indicator definition.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndicatorDefinition'
+        '500':
+          $ref: '#/components/responses/UnknownIdentifier'
+components:
+  schemas:
+    IndicatorSubCategory:
+      type: object
+      properties:
+        subCategory:
+          type: string
+        subCategorySort:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndicatorItem'
+    IndicatorItem:
+      type: object
+      properties:
+        codeID:
+          type: integer
+        label:
+          type: string
+        databaseID:
+          type: integer
+        seriesType:
+          type: string
+        indicatorSort:
+          type: integer
+        external:
+          type: boolean
+        isCollection:
+          type: boolean
+    IndicatorDefinition:
+      type: object
+      description: The full metadata record for one indicator.
+      properties:
+        codeID:
+          type: integer
+        code:
+          type: string
+          description: The ITU short indicator code
+          e.g. "i99H".: null
+        label:
+          type: string
+        codeDesc:
+          type: string
+        units:
+          type: string
+        unitsType:
+          type: string
+        alternativeUnits: {}
+        answerType:
+          type: string
+        startYear:
+          type: integer
+        endYear:
+          type: integer
+        category:
+          type: string
+        categorySort:
+          type: integer
+        indicatorCategory:
+          type: string
+        indicatorCategorySort:
+          type: integer
+        subCategory:
+          type: string
+        subCategorySort:
+          type: integer
+        databaseID:
+          type: integer
+        codeVisibility:
+          type: string
+          description: e.g. "Public/Free".
+        seriesType:
+          type: string
+        archive:
+          type: boolean
+        external:
+          type: boolean
+        indicatorSort:
+          type: integer
+        disaggregation:
+          type: array
+          items:
+            type: object
+        disaggregationSort:
+          type: integer
+        sibling:
+          type: array
+          items:
+            type: object
+        availableCountries:
+          type: array
+          items:
+            type: object
+        landingPage:
+          type: string
+        Question:
+          type: string
+        Comment:
+          type: string
+    IndicatorCategory:
+      type: object
+      properties:
+        category:
+          type: string
+        categorySort:
+          type: integer
+        subCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndicatorSubCategory'
+  parameters:
+    codeID:
+      name: codeID
+      in: path
+      required: true
+      description: The DataHub indicator identifier, from `getIndicatorCategories`.
+      schema:
+        type: integer
+      example: 11624
+  responses:
+    UnknownIdentifier:
+      description: Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting 'availableCountries')`.
+      content:
+        text/plain:
+          schema:
+            type: string
+externalDocs:
+  description: ITU DataHub portal (the only human surface for this API)
+  url: https://datahub.itu.int/

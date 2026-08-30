@@ -1,0 +1,166 @@
+openapi: 3.2.0
+info:
+  title: ITU DataHub IDI API
+  version: '2'
+  summary: Undocumented public JSON API behind the ITU DataHub ICT statistics portal.
+  description: 'ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API. This document is an API Evangelist **observed-behaviour** description: every path, parameter, status code and response shape below was recorded from live, anonymous HTTP calls against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a behaviour was not observed it is simply absent.
+
+
+    The route templates were recovered from the DataHub Next.js client bundle (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists and to capture its real response. Treat this surface as an internal backend that happens to be public rather than as a supported product API: it can change without notice.
+
+
+    No authentication of any kind is required. No API key, no `Referer`, no `Origin`, no `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).'
+  contact:
+    name: ITU ICT Data & Analytics Division
+    email: indicators@itu.int
+    url: https://datahub.itu.int/
+  license:
+    name: ITU Terms of Use
+    url: https://www.itu.int/en/about/Pages/terms-of-use.aspx
+  x-apievangelist-provenance:
+    method: derived
+    derived_from: live anonymous HTTP probes + the public DataHub client bundle
+    probed: '2026-07-26'
+    provider_published_spec: false
+    note: Derived by API Evangelist from observed responses. ITU has not published, reviewed, or endorsed this description.
+servers:
+- url: https://api.datahub.itu.int/v2
+  description: Production (AWS API Gateway + CloudFront). Anonymous.
+tags:
+- name: IDI
+  description: ICT Development Index composite scores.
+paths:
+  /idi/dashboard/all:
+    get:
+      operationId: getIdiStructure
+      tags:
+      - IDI
+      summary: Get the ICT Development Index structure
+      description: Returns the IDI composite tree — the index, its Universal connectivity and Meaningful connectivity pillars, and the underlying indicators each pillar scores.
+      responses:
+        '200':
+          description: The IDI structure.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdiNode'
+  /idi/dashboard/version:
+    get:
+      operationId: listIdiVersions
+      tags:
+      - IDI
+      summary: List available IDI editions
+      description: Returns the list of IDI edition years available in DataHub.
+      responses:
+        '200':
+          description: The edition years.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+              examples:
+                editions:
+                  value:
+                  - 2023
+                  - 2024
+                  - 2025
+                  - 2026
+  /idi/data/bycountryid/{countryID}:
+    get:
+      operationId: getIdiByCountry
+      tags:
+      - IDI
+      summary: Get IDI scores for one country
+      description: Returns the IDI pillar and indicator scores for a single country, keyed by the ITU `CountryID` from `listCountries` (not the ISO code).
+      parameters:
+      - $ref: '#/components/parameters/countryID'
+      responses:
+        '200':
+          description: The country's IDI scores. Returns HTTP 200 with an empty array where no scores exist for the supplied identifier.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdiScore'
+  /idi/region/byregionid/{regionID}:
+    get:
+      operationId: getIdiByRegion
+      tags:
+      - IDI
+      summary: Get IDI scores for one region
+      description: Returns the IDI pillar and indicator scores aggregated for a single region.
+      parameters:
+      - $ref: '#/components/parameters/regionID'
+      responses:
+        '200':
+          description: The region's IDI scores.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdiScore'
+              examples:
+                arabStates:
+                  value:
+                  - regionID: 3
+                    dataID: 2026003005
+                    codeID: 5
+                    score: 56.355555555555554
+                    dataYear: 2026
+components:
+  parameters:
+    regionID:
+      name: regionID
+      in: path
+      required: true
+      description: The region identifier, from `listRegions`.
+      schema:
+        type: integer
+      example: 3
+    countryID:
+      name: countryID
+      in: path
+      required: true
+      description: The ITU numeric country identifier, from `listCountries`.
+      schema:
+        type: integer
+      example: 244
+  schemas:
+    IdiScore:
+      type: object
+      properties:
+        dataID:
+          type: integer
+        codeID:
+          type: integer
+        regionID:
+          type: integer
+        score:
+          type: number
+        dataYear:
+          type: integer
+    IdiNode:
+      type: object
+      description: A node in the ICT Development Index composite tree.
+      properties:
+        codeID:
+          type: integer
+        code:
+          type: string
+        label:
+          type: string
+        codeDesc:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdiNode'
+externalDocs:
+  description: ITU DataHub portal (the only human surface for this API)
+  url: https://datahub.itu.int/
