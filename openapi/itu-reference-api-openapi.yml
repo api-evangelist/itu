@@ -3,13 +3,7 @@ info:
   title: ITU DataHub Reference API
   version: '2'
   summary: Undocumented public JSON API behind the ITU DataHub ICT statistics portal.
-  description: 'ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API. This document is an API Evangelist **observed-behaviour** description: every path, parameter, status code and response shape below was recorded from live, anonymous HTTP calls against `https://api.datahub.itu.int/v2` on 2026-07-25/26. Nothing here is invented — where a behaviour was not observed it is simply absent.
-
-
-    The route templates were recovered from the DataHub Next.js client bundle (`datahub.itu.int/_next/static/chunks/*.js`), which hardcodes the base URL `https://api.datahub.itu.int/v2`, and each recovered route was then called to confirm it exists and to capture its real response. Treat this surface as an internal backend that happens to be public rather than as a supported product API: it can change without notice.
-
-
-    No authentication of any kind is required. No API key, no `Referer`, no `Origin`, no `User-Agent`. `Access-Control-Allow-Origin: *` is returned on every response. The service runs on AWS API Gateway behind CloudFront (`x-amzn-requestid`, `x-amz-cf-id` response headers).'
+  description: ITU publishes **no** OpenAPI, no reference documentation, and no terms of programmatic use for this API.
   contact:
     name: ITU ICT Data & Analytics Division
     email: indicators@itu.int
@@ -101,17 +95,6 @@ paths:
                     regionID: 3
 components:
   schemas:
-    Region:
-      type: object
-      properties:
-        className:
-          type: string
-        regionCode:
-          type: string
-        regionName:
-          type: string
-        regionID:
-          type: integer
     CountryRegion:
       type: object
       description: A regional grouping membership for a country.
@@ -146,6 +129,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CountryRegion'
+    Region:
+      type: object
+      properties:
+        className:
+          type: string
+        regionCode:
+          type: string
+        regionName:
+          type: string
+        regionID:
+          type: integer
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/

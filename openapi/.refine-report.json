@@ -1,0 +1,36 @@
+{
+  "provider": "itu",
+  "sources": [
+    "_original/itu-datahub-openapi.yml",
+    "_original/itu-proximity-openapi.yml"
+  ],
+  "outputs": [
+    "itu-dashboards-api-openapi.yml",
+    "itu-data-api-openapi.yml",
+    "itu-idi-api-openapi.yml",
+    "itu-indicators-api-openapi.yml",
+    "itu-methodology-api-openapi.yml",
+    "itu-reference-api-openapi.yml",
+    "itu-umc-api-openapi.yml",
+    "itu-proximity-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "itu-datahub-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "itu-proximity-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "itu-dashboards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-idi-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-indicators-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-methodology-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-proximity-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-reference-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "itu-umc-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

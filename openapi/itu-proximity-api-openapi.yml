@@ -3,13 +3,7 @@ info:
   title: ITU to Fibre Node Proximity API
   version: '1'
   summary: ITU-D batch geospatial API scoring coordinates against the ITU Broadband Maps fibre network.
-  description: 'ITU-D publishes this API as a **demonstration** on a single page — "API - Proximity to Fibre Node" — with a sample CSV and a prose explanation, but no base URL, no endpoint reference, no parameter table, and no OpenAPI. This document is an API Evangelist **observed-behaviour** description: both routes, the `code` query parameter, the `text/csv` request contract, the plain-text ZIP-URL response, and every status code below were confirmed with live calls on 2026-07-26 using ITU''s own published `sample_api.csv`.
-
-
-    The routes and their function keys were recovered from ITU''s public web client at `https://bbmaps.itu.int/web10km/`, which hardcodes both. The service runs on Azure Functions; access is by a function key passed as `?code=`, and because ITU embeds that key in a public client the surface is effectively open — there is no signup path to obtain a key of your own.
-
-
-    The API is **batch and asynchronous in shape**: you POST a CSV body of coordinates and receive a plain-text URL to a generated ZIP under `https://bbmaps.itu.int/api/output/`, which contains a CSV with your input rows plus the computed column.'
+  description: ITU-D publishes this API as a **demonstration** on a single page — "API - Proximity to Fibre Node" — with a sample CSV and a prose explanation, but no base URL, no endpoint reference, no parameter table, and no OpenAPI.
   contact:
     name: ITU Telecommunication Development Bureau (BDT)
     url: https://www.itu.int/en/ITU-D/Technology/Pages/EmergingTechnologiesPages/api.aspx
