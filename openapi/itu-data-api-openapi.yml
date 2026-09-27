@@ -132,40 +132,6 @@ paths:
                     internalNote: null
 components:
   schemas:
-    DataPoint:
-      type: object
-      description: One country-year observation of an indicator.
-      properties:
-        dataID:
-          type: integer
-        codeID:
-          type: integer
-        code:
-          type: string
-        countryID:
-          type: integer
-        isoCode:
-          type: string
-        shortName:
-          type: string
-        dataYear:
-          type: integer
-        dataSource:
-          type: string
-          description: The reporting source
-          e.g. a national regulator or "ITU estimate.".: null
-        dataNote:
-          type: string
-        answer:
-          type: array
-          description: The observed value. Values are returned as strings on this endpoint.
-          items:
-            type: object
-            properties:
-              value:
-                type: string
-              id:
-                type: integer
     AggregatePoint:
       type: object
       description: One region-year aggregate of an indicator, computed by ITU.
@@ -214,17 +180,41 @@ components:
         updateDate:
           type: string
           format: date-time
+    DataPoint:
+      type: object
+      description: One country-year observation of an indicator.
+      properties:
+        dataID:
+          type: integer
+        codeID:
+          type: integer
+        code:
+          type: string
+        countryID:
+          type: integer
+        isoCode:
+          type: string
+        shortName:
+          type: string
+        dataYear:
+          type: integer
+        dataSource:
+          type: string
+          description: The reporting source
+          e.g. a national regulator or "ITU estimate.".: null
+        dataNote:
+          type: string
+        answer:
+          type: array
+          description: The observed value. Values are returned as strings on this endpoint.
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              id:
+                type: integer
   parameters:
-    iso:
-      name: iso
-      in: path
-      required: true
-      description: ISO 3166-1 alpha-3 country code, from `listCountries`.
-      schema:
-        type: string
-        minLength: 3
-        maxLength: 3
-      example: USA
     regionID:
       name: regionID
       in: path
@@ -241,6 +231,16 @@ components:
       schema:
         type: integer
       example: 11624
+    iso:
+      name: iso
+      in: path
+      required: true
+      description: ISO 3166-1 alpha-3 country code, from `listCountries`.
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 3
+      example: USA
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/

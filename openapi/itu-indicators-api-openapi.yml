@@ -61,31 +61,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnknownIdentifier'
 components:
-  responses:
-    UnknownIdentifier:
-      description: Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting 'availableCountries')`.
-      content:
-        text/plain:
-          schema:
-            type: string
   schemas:
-    IndicatorItem:
-      type: object
-      properties:
-        codeID:
-          type: integer
-        label:
-          type: string
-        databaseID:
-          type: integer
-        seriesType:
-          type: string
-        indicatorSort:
-          type: integer
-        external:
-          type: boolean
-        isCollection:
-          type: boolean
     IndicatorDefinition:
       type: object
       description: The full metadata record for one indicator.
@@ -156,17 +132,6 @@ components:
           type: string
         Comment:
           type: string
-    IndicatorCategory:
-      type: object
-      properties:
-        category:
-          type: string
-        categorySort:
-          type: integer
-        subCategory:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndicatorSubCategory'
     IndicatorSubCategory:
       type: object
       properties:
@@ -178,6 +143,41 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IndicatorItem'
+    IndicatorItem:
+      type: object
+      properties:
+        codeID:
+          type: integer
+        label:
+          type: string
+        databaseID:
+          type: integer
+        seriesType:
+          type: string
+        indicatorSort:
+          type: integer
+        external:
+          type: boolean
+        isCollection:
+          type: boolean
+    IndicatorCategory:
+      type: object
+      properties:
+        category:
+          type: string
+        categorySort:
+          type: integer
+        subCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndicatorSubCategory'
+  responses:
+    UnknownIdentifier:
+      description: Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting 'availableCountries')`.
+      content:
+        text/plain:
+          schema:
+            type: string
   parameters:
     codeID:
       name: codeID

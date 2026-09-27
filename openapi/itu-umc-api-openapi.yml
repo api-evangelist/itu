@@ -153,6 +153,13 @@ paths:
                   $ref: '#/components/schemas/UmcCountryScore'
 components:
   schemas:
+    UmcMacro:
+      type: object
+      properties:
+        macroID:
+          type: integer
+        label:
+          type: string
     UmcCountryScore:
       type: object
       properties:
@@ -192,6 +199,13 @@ components:
           type: array
           items:
             type: object
+    UmcTopic:
+      type: object
+      properties:
+        topicID:
+          type: integer
+        label:
+          type: string
     UmcTarget:
       type: object
       properties:
@@ -240,20 +254,6 @@ components:
         updateDate:
           type: integer
           description: Epoch milliseconds.
-    UmcTopic:
-      type: object
-      properties:
-        topicID:
-          type: integer
-        label:
-          type: string
-    UmcMacro:
-      type: object
-      properties:
-        macroID:
-          type: integer
-        label:
-          type: string
   parameters:
     countryID:
       name: countryID

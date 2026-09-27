@@ -108,6 +108,23 @@ paths:
                     score: 56.355555555555554
                     dataYear: 2026
 components:
+  parameters:
+    countryID:
+      name: countryID
+      in: path
+      required: true
+      description: The ITU numeric country identifier, from `listCountries`.
+      schema:
+        type: integer
+      example: 244
+    regionID:
+      name: regionID
+      in: path
+      required: true
+      description: The region identifier, from `listRegions`.
+      schema:
+        type: integer
+      example: 3
   schemas:
     IdiScore:
       type: object
@@ -138,23 +155,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IdiNode'
-  parameters:
-    regionID:
-      name: regionID
-      in: path
-      required: true
-      description: The region identifier, from `listRegions`.
-      schema:
-        type: integer
-      example: 3
-    countryID:
-      name: countryID
-      in: path
-      required: true
-      description: The ITU numeric country identifier, from `listCountries`.
-      schema:
-        type: integer
-      example: 244
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/
