@@ -109,14 +109,6 @@ paths:
                     dataYear: 2026
 components:
   parameters:
-    countryID:
-      name: countryID
-      in: path
-      required: true
-      description: The ITU numeric country identifier, from `listCountries`.
-      schema:
-        type: integer
-      example: 244
     regionID:
       name: regionID
       in: path
@@ -125,20 +117,15 @@ components:
       schema:
         type: integer
       example: 3
+    countryID:
+      name: countryID
+      in: path
+      required: true
+      description: The ITU numeric country identifier, from `listCountries`.
+      schema:
+        type: integer
+      example: 244
   schemas:
-    IdiScore:
-      type: object
-      properties:
-        dataID:
-          type: integer
-        codeID:
-          type: integer
-        regionID:
-          type: integer
-        score:
-          type: number
-        dataYear:
-          type: integer
     IdiNode:
       type: object
       description: A node in the ICT Development Index composite tree.
@@ -155,6 +142,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IdiNode'
+    IdiScore:
+      type: object
+      properties:
+        dataID:
+          type: integer
+        codeID:
+          type: integer
+        regionID:
+          type: integer
+        score:
+          type: number
+        dataYear:
+          type: integer
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/

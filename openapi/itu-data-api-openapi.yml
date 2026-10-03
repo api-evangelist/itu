@@ -215,14 +215,6 @@ components:
               id:
                 type: integer
   parameters:
-    regionID:
-      name: regionID
-      in: path
-      required: true
-      description: The region identifier, from `listRegions`.
-      schema:
-        type: integer
-      example: 3
     codeID:
       name: codeID
       in: path
@@ -231,6 +223,14 @@ components:
       schema:
         type: integer
       example: 11624
+    regionID:
+      name: regionID
+      in: path
+      required: true
+      description: The region identifier, from `listRegions`.
+      schema:
+        type: integer
+      example: 3
     iso:
       name: iso
       in: path
