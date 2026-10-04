@@ -160,6 +160,17 @@ components:
           type: integer
         label:
           type: string
+    UmcTarget:
+      type: object
+      properties:
+        targetID:
+          type: integer
+        min:
+          type: number
+        max:
+          type: number
+        label:
+          type: string
     UmcCountryScore:
       type: object
       properties:
@@ -199,17 +210,6 @@ components:
           type: array
           items:
             type: object
-    UmcTarget:
-      type: object
-      properties:
-        targetID:
-          type: integer
-        min:
-          type: number
-        max:
-          type: number
-        label:
-          type: string
     UmcIndicator:
       type: object
       properties:

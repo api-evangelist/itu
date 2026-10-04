@@ -111,17 +111,6 @@ components:
           type: integer
         region:
           type: string
-    Region:
-      type: object
-      properties:
-        className:
-          type: string
-        regionCode:
-          type: string
-        regionName:
-          type: string
-        regionID:
-          type: integer
     Country:
       type: object
       description: A country or economy in the ITU reference list.
@@ -140,6 +129,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CountryRegion'
+    Region:
+      type: object
+      properties:
+        className:
+          type: string
+        regionCode:
+          type: string
+        regionName:
+          type: string
+        regionID:
+          type: integer
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/

@@ -61,18 +61,23 @@ paths:
         '500':
           $ref: '#/components/responses/UnknownIdentifier'
 components:
+  parameters:
+    codeID:
+      name: codeID
+      in: path
+      required: true
+      description: The DataHub indicator identifier, from `getIndicatorCategories`.
+      schema:
+        type: integer
+      example: 11624
+  responses:
+    UnknownIdentifier:
+      description: Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting 'availableCountries')`.
+      content:
+        text/plain:
+          schema:
+            type: string
   schemas:
-    IndicatorSubCategory:
-      type: object
-      properties:
-        subCategory:
-          type: string
-        subCategorySort:
-          type: integer
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndicatorItem'
     IndicatorCategory:
       type: object
       properties:
@@ -84,23 +89,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IndicatorSubCategory'
-    IndicatorItem:
-      type: object
-      properties:
-        codeID:
-          type: integer
-        label:
-          type: string
-        databaseID:
-          type: integer
-        seriesType:
-          type: string
-        indicatorSort:
-          type: integer
-        external:
-          type: boolean
-        isCollection:
-          type: boolean
     IndicatorDefinition:
       type: object
       description: The full metadata record for one indicator.
@@ -171,22 +159,34 @@ components:
           type: string
         Comment:
           type: string
-  parameters:
-    codeID:
-      name: codeID
-      in: path
-      required: true
-      description: The DataHub indicator identifier, from `getIndicatorCategories`.
-      schema:
-        type: integer
-      example: 11624
-  responses:
-    UnknownIdentifier:
-      description: Observed on an unknown identifier. The body is a plain-text runtime error string, not JSON and not RFC 9457 problem+json — e.g. `Cannot set properties of undefined (setting 'availableCountries')`.
-      content:
-        text/plain:
-          schema:
-            type: string
+    IndicatorSubCategory:
+      type: object
+      properties:
+        subCategory:
+          type: string
+        subCategorySort:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndicatorItem'
+    IndicatorItem:
+      type: object
+      properties:
+        codeID:
+          type: integer
+        label:
+          type: string
+        databaseID:
+          type: integer
+        seriesType:
+          type: string
+        indicatorSort:
+          type: integer
+        external:
+          type: boolean
+        isCollection:
+          type: boolean
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/

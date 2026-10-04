@@ -131,6 +131,33 @@ paths:
                     numberOfAnswer: null
                     internalNote: null
 components:
+  parameters:
+    codeID:
+      name: codeID
+      in: path
+      required: true
+      description: The DataHub indicator identifier, from `getIndicatorCategories`.
+      schema:
+        type: integer
+      example: 11624
+    iso:
+      name: iso
+      in: path
+      required: true
+      description: ISO 3166-1 alpha-3 country code, from `listCountries`.
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 3
+      example: USA
+    regionID:
+      name: regionID
+      in: path
+      required: true
+      description: The region identifier, from `listRegions`.
+      schema:
+        type: integer
+      example: 3
   schemas:
     AggregatePoint:
       type: object
@@ -214,33 +241,6 @@ components:
                 type: string
               id:
                 type: integer
-  parameters:
-    codeID:
-      name: codeID
-      in: path
-      required: true
-      description: The DataHub indicator identifier, from `getIndicatorCategories`.
-      schema:
-        type: integer
-      example: 11624
-    regionID:
-      name: regionID
-      in: path
-      required: true
-      description: The region identifier, from `listRegions`.
-      schema:
-        type: integer
-      example: 3
-    iso:
-      name: iso
-      in: path
-      required: true
-      description: ISO 3166-1 alpha-3 country code, from `listCountries`.
-      schema:
-        type: string
-        minLength: 3
-        maxLength: 3
-      example: USA
 externalDocs:
   description: ITU DataHub portal (the only human surface for this API)
   url: https://datahub.itu.int/
