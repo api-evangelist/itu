@@ -104,8 +104,6 @@ components:
           examples:
             generated:
               value: https://bbmaps.itu.int/api/output/exported_data_20260726_023009_8c5a21de-f1f8-4c53-a499-ccd98b137037.zip
-    Unauthorized:
-      description: Returned with an empty body when the `code` query parameter is missing or does not match a valid function key. Confirmed on both an absent key and a bogus key.
     ProcessingError:
       description: Returned as plain text when the CSV body cannot be processed — most commonly a missing required column. Not RFC 9457 problem+json.
       content:
@@ -115,6 +113,8 @@ components:
           examples:
             missingColumns:
               value: 'Error in import_csv_distance: CSV file is missing required columns: [''X'', ''Y'']'
+    Unauthorized:
+      description: Returned with an empty body when the `code` query parameter is missing or does not match a valid function key. Confirmed on both an absent key and a bogus key.
   securitySchemes:
     functionKey:
       type: apiKey

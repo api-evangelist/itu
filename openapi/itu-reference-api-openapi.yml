@@ -95,22 +95,6 @@ paths:
                     regionID: 3
 components:
   schemas:
-    CountryRegion:
-      type: object
-      description: A regional grouping membership for a country.
-      properties:
-        id:
-          type: integer
-        regionCode:
-          type: string
-        class:
-          type: string
-          description: The classification family
-          e.g. "ITU/BDT & Other Classification".: null
-        classID:
-          type: integer
-        region:
-          type: string
     Country:
       type: object
       description: A country or economy in the ITU reference list.
@@ -129,6 +113,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CountryRegion'
+    CountryRegion:
+      type: object
+      description: A regional grouping membership for a country.
+      properties:
+        id:
+          type: integer
+        regionCode:
+          type: string
+        class:
+          type: string
+          description: The classification family
+          e.g. "ITU/BDT & Other Classification".: null
+        classID:
+          type: integer
+        region:
+          type: string
     Region:
       type: object
       properties:

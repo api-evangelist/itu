@@ -153,22 +153,48 @@ paths:
                   $ref: '#/components/schemas/UmcCountryScore'
 components:
   schemas:
+    UmcIndicator:
+      type: object
+      properties:
+        codeID:
+          type: integer
+        code:
+          type: string
+        label:
+          type: string
+        indicatorLabel:
+          type: string
+        codeDesc:
+          type: string
+        units:
+          type: string
+        source:
+          type: string
+        archive:
+          type: boolean
+        topicID:
+          type: integer
+        macroID:
+          type: integer
+        targetName:
+          type: string
+        targetDesc:
+          type: string
+        targetMinValue:
+          type: number
+        targetMaxValue:
+          type: number
+        createDate:
+          type: integer
+          description: Epoch milliseconds.
+        updateDate:
+          type: integer
+          description: Epoch milliseconds.
     UmcTopic:
       type: object
       properties:
         topicID:
           type: integer
-        label:
-          type: string
-    UmcTarget:
-      type: object
-      properties:
-        targetID:
-          type: integer
-        min:
-          type: number
-        max:
-          type: number
         label:
           type: string
     UmcCountryScore:
@@ -210,43 +236,17 @@ components:
           type: array
           items:
             type: object
-    UmcIndicator:
+    UmcTarget:
       type: object
       properties:
-        codeID:
+        targetID:
           type: integer
-        code:
-          type: string
+        min:
+          type: number
+        max:
+          type: number
         label:
           type: string
-        indicatorLabel:
-          type: string
-        codeDesc:
-          type: string
-        units:
-          type: string
-        source:
-          type: string
-        archive:
-          type: boolean
-        topicID:
-          type: integer
-        macroID:
-          type: integer
-        targetName:
-          type: string
-        targetDesc:
-          type: string
-        targetMinValue:
-          type: number
-        targetMaxValue:
-          type: number
-        createDate:
-          type: integer
-          description: Epoch milliseconds.
-        updateDate:
-          type: integer
-          description: Epoch milliseconds.
     UmcMacro:
       type: object
       properties:
